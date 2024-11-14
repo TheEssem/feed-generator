@@ -2,12 +2,13 @@ import { QueryParams } from '../lexicon/types/app/bsky/feed/getFeedSkeleton'
 import { AppContext } from '../config'
 
 // max 15 chars
-export const shortname = 'whats-alf'
+export const shortname = 'your-pds'
 
-export const handler = async (ctx: AppContext, params: QueryParams) => {
+export const handler = async (ctx: AppContext, params: QueryParams, pds: string) => {
   let builder = ctx.db
     .selectFrom('post')
     .selectAll()
+    .where('pds', '=', pds)
     .orderBy('indexedAt', 'desc')
     .orderBy('cid', 'desc')
     .limit(params.limit)

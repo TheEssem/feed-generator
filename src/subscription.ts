@@ -1,48 +1,44 @@
-import {
-  OutputSchema as RepoEvent,
-  isCommit,
-} from './lexicon/types/com/atproto/sync/subscribeRepos'
-import { FirehoseSubscriptionBase, getOpsByType } from './util/subscription'
+import { FirehoseSubscriptionBase, isPost } from './util/subscription'
+import { ids } from './lexicon/lexicons'
+import type { MessageEvent } from 'ws'
+import { type CommitEvent, type AccountEvent, type IdentityEvent, CommitType } from './util/types'
 
 export class FirehoseSubscription extends FirehoseSubscriptionBase {
-  async handleEvent(evt: RepoEvent) {
-    if (!isCommit(evt)) return
-
-    const ops = await getOpsByType(evt)
-
-    // This logs the text of every post off the firehose.
-    // Just for fun :)
-    // Delete before actually using
-    for (const post of ops.posts.creates) {
-      console.log(post.record.text)
+  public count = 0
+  async handleEvent(evt: MessageEvent) {
+    const event = JSON.parse(evt.data.toString()) as
+					| CommitEvent<"app.bsky.feed.post">
+					| AccountEvent
+					| IdentityEvent;
+    this.count++
+    if (this.count === 20) {
+      await this.updateCursor(event.time_us)
+      this.count = 0
     }
+    if (event.kind !== "commit") return
+    if (!event.commit?.collection || !event.commit.rkey || !event.commit.rev) return
+    if (event.commit.collection !== ids.AppBskyFeedPost) return
 
-    const postsToDelete = ops.posts.deletes.map((del) => del.uri)
-    const postsToCreate = ops.posts.creates
-      .filter((create) => {
-        // only alf-related posts
-        return create.record.text.toLowerCase().includes('alf')
-      })
-      .map((create) => {
-        // map alf-related posts to a db row
-        return {
-          uri: create.uri,
-          cid: create.cid,
-          indexedAt: new Date().toISOString(),
-        }
-      })
-
-    if (postsToDelete.length > 0) {
-      await this.db
-        .deleteFrom('post')
-        .where('uri', 'in', postsToDelete)
-        .execute()
-    }
-    if (postsToCreate.length > 0) {
+    if (event.commit.operation === CommitType.Create) {
+      if (!event.commit.record) return
+      if (!isPost(event.commit.record)) return
+      const resolved = await this.didResolver.resolve(event.did)
+      const pds = resolved?.service?.[0].serviceEndpoint
+      if (typeof pds !== "string") return
       await this.db
         .insertInto('post')
-        .values(postsToCreate)
+        .values([{
+          uri: `at://${event.did}/app.bsky.feed.post/${event.commit.rkey}`,
+          cid: event.commit.cid,
+          pds: pds,
+          indexedAt: new Date().toISOString(),
+        }])
         .onConflict((oc) => oc.doNothing())
+        .execute()
+    } else if (event.commit.operation === CommitType.Delete) {
+      await this.db
+        .deleteFrom('post')
+        .where('uri', '=', `at://${event.did}/app.bsky.feed.post/${event.commit.rkey}`)
         .execute()
     }
   }

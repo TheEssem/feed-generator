@@ -10,8 +10,8 @@ export default function (server: Server, ctx: AppContext) {
     const feedUri = new AtUri(params.feed)
     const algo = algos[feedUri.rkey]
     if (
-      feedUri.hostname !== ctx.cfg.publisherDid ||
-      feedUri.collection !== 'app.bsky.feed.generator' ||
+      feedUri.host !== ctx.cfg.publisherDid ||
+      !feedUri.pathname.startsWith('/app.bsky.feed.generator') ||
       !algo
     ) {
       throw new InvalidRequestError(
@@ -29,7 +29,19 @@ export default function (server: Server, ctx: AppContext) {
      * )
      */
 
-    const body = await algo(ctx, params)
+    const requesterDid = await validateAuth(
+      req,
+      ctx.cfg.serviceDid,
+      ctx.didResolver,
+    )
+
+    const resolved = await ctx.didResolver.resolve(requesterDid)
+    const pds = resolved?.service?.[0].serviceEndpoint
+    if (typeof pds !== "string") throw new InvalidRequestError('No service endpoint', 'NoServiceEndpoint')
+
+    //const pds = "https://oyster.us-east.host.bsky.network"
+
+    const body = await algo(ctx, params, pds)
     return {
       encoding: 'application/json',
       body: body,
