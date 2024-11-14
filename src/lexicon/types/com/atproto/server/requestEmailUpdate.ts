@@ -6,20 +6,14 @@ import { ValidationResult, BlobRef } from '@atproto/lexicon'
 import { lexicons } from '../../../../lexicons'
 import { isObj, hasProp } from '../../../../util'
 import { CID } from 'multiformats/cid'
-import { HandlerAuth } from '@atproto/xrpc-server'
-import * as ComAtprotoAdminDefs from './defs'
+import { HandlerAuth, HandlerPipeThrough } from '@atproto/xrpc-server'
 
-export interface QueryParams {
-  subject?: string
-  limit: number
-  cursor?: string
-}
+export interface QueryParams {}
 
 export type InputSchema = undefined
 
 export interface OutputSchema {
-  cursor?: string
-  actions: ComAtprotoAdminDefs.ActionView[]
+  tokenRequired: boolean
   [k: string]: unknown
 }
 
@@ -36,7 +30,7 @@ export interface HandlerError {
   message?: string
 }
 
-export type HandlerOutput = HandlerError | HandlerSuccess
+export type HandlerOutput = HandlerError | HandlerSuccess | HandlerPipeThrough
 export type HandlerReqCtx<HA extends HandlerAuth = never> = {
   auth: HA
   params: QueryParams

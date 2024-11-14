@@ -7,6 +7,7 @@ import { isObj, hasProp } from '../../../../util'
 import { CID } from 'multiformats/cid'
 
 export interface Record {
+  /** Reference (AT-URI) to the post record. */
   post: string
   allow?: (
     | MentionRule
@@ -15,6 +16,8 @@ export interface Record {
     | { $type: string; [k: string]: unknown }
   )[]
   createdAt: string
+  /** List of hidden reply URIs. */
+  hiddenReplies?: string[]
   [k: string]: unknown
 }
 

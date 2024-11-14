@@ -6,19 +6,25 @@ import { ValidationResult, BlobRef } from '@atproto/lexicon'
 import { lexicons } from '../../../../lexicons'
 import { isObj, hasProp } from '../../../../util'
 import { CID } from 'multiformats/cid'
-import { HandlerAuth } from '@atproto/xrpc-server'
-import * as ComAtprotoAdminDefs from './defs'
+import { HandlerAuth, HandlerPipeThrough } from '@atproto/xrpc-server'
 
 export interface QueryParams {}
 
 export interface InputSchema {
-  actionId: number
-  reportIds: number[]
-  createdBy: string
+  /** A token received through com.atproto.identity.requestPlcOperationSignature */
+  token?: string
+  rotationKeys?: string[]
+  alsoKnownAs?: string[]
+  verificationMethods?: {}
+  services?: {}
   [k: string]: unknown
 }
 
-export type OutputSchema = ComAtprotoAdminDefs.ActionView
+export interface OutputSchema {
+  /** A signed DID PLC operation. */
+  operation: {}
+  [k: string]: unknown
+}
 
 export interface HandlerInput {
   encoding: 'application/json'
@@ -36,7 +42,7 @@ export interface HandlerError {
   message?: string
 }
 
-export type HandlerOutput = HandlerError | HandlerSuccess
+export type HandlerOutput = HandlerError | HandlerSuccess | HandlerPipeThrough
 export type HandlerReqCtx<HA extends HandlerAuth = never> = {
   auth: HA
   params: QueryParams

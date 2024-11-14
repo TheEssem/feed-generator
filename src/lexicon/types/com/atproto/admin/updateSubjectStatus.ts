@@ -6,33 +6,32 @@ import { ValidationResult, BlobRef } from '@atproto/lexicon'
 import { lexicons } from '../../../../lexicons'
 import { isObj, hasProp } from '../../../../util'
 import { CID } from 'multiformats/cid'
-import { HandlerAuth } from '@atproto/xrpc-server'
+import { HandlerAuth, HandlerPipeThrough } from '@atproto/xrpc-server'
 import * as ComAtprotoAdminDefs from './defs'
 import * as ComAtprotoRepoStrongRef from '../repo/strongRef'
 
 export interface QueryParams {}
 
 export interface InputSchema {
-  action:
-    | 'com.atproto.admin.defs#takedown'
-    | 'com.atproto.admin.defs#flag'
-    | 'com.atproto.admin.defs#acknowledge'
-    | (string & {})
   subject:
     | ComAtprotoAdminDefs.RepoRef
     | ComAtprotoRepoStrongRef.Main
+    | ComAtprotoAdminDefs.RepoBlobRef
     | { $type: string; [k: string]: unknown }
-  subjectBlobCids?: string[]
-  createLabelVals?: string[]
-  negateLabelVals?: string[]
-  reason: string
-  /** Indicates how long this action was meant to be in effect before automatically expiring. */
-  durationInHours?: number
-  createdBy: string
+  takedown?: ComAtprotoAdminDefs.StatusAttr
+  deactivated?: ComAtprotoAdminDefs.StatusAttr
   [k: string]: unknown
 }
 
-export type OutputSchema = ComAtprotoAdminDefs.ActionView
+export interface OutputSchema {
+  subject:
+    | ComAtprotoAdminDefs.RepoRef
+    | ComAtprotoRepoStrongRef.Main
+    | ComAtprotoAdminDefs.RepoBlobRef
+    | { $type: string; [k: string]: unknown }
+  takedown?: ComAtprotoAdminDefs.StatusAttr
+  [k: string]: unknown
+}
 
 export interface HandlerInput {
   encoding: 'application/json'
@@ -48,10 +47,9 @@ export interface HandlerSuccess {
 export interface HandlerError {
   status: number
   message?: string
-  error?: 'SubjectHasAction'
 }
 
-export type HandlerOutput = HandlerError | HandlerSuccess
+export type HandlerOutput = HandlerError | HandlerSuccess | HandlerPipeThrough
 export type HandlerReqCtx<HA extends HandlerAuth = never> = {
   auth: HA
   params: QueryParams

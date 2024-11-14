@@ -6,15 +6,25 @@ import { ValidationResult, BlobRef } from '@atproto/lexicon'
 import { lexicons } from '../../../../lexicons'
 import { isObj, hasProp } from '../../../../util'
 import { CID } from 'multiformats/cid'
-import { HandlerAuth } from '@atproto/xrpc-server'
-import * as ComAtprotoAdminDefs from './defs'
+import { HandlerAuth, HandlerPipeThrough } from '@atproto/xrpc-server'
 
 export interface QueryParams {
+  /** The DID of the repo. */
   did: string
 }
 
 export type InputSchema = undefined
-export type OutputSchema = ComAtprotoAdminDefs.RepoViewDetail
+
+export interface OutputSchema {
+  did: string
+  active: boolean
+  /** If active=false, this optional field indicates a possible reason for why the account is not active. If active=false and no status is supplied, then the host makes no claim for why the repository is no longer being hosted. */
+  status?: 'takendown' | 'suspended' | 'deactivated' | (string & {})
+  /** Optional field, the current rev of the repo, if active=true */
+  rev?: string
+  [k: string]: unknown
+}
+
 export type HandlerInput = undefined
 
 export interface HandlerSuccess {
@@ -29,7 +39,7 @@ export interface HandlerError {
   error?: 'RepoNotFound'
 }
 
-export type HandlerOutput = HandlerError | HandlerSuccess
+export type HandlerOutput = HandlerError | HandlerSuccess | HandlerPipeThrough
 export type HandlerReqCtx<HA extends HandlerAuth = never> = {
   auth: HA
   params: QueryParams

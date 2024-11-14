@@ -6,16 +6,26 @@ import { ValidationResult, BlobRef } from '@atproto/lexicon'
 import { lexicons } from '../../../../lexicons'
 import { isObj, hasProp } from '../../../../util'
 import { CID } from 'multiformats/cid'
-import { HandlerAuth } from '@atproto/xrpc-server'
-import * as ComAtprotoAdminDefs from './defs'
+import { HandlerAuth, HandlerPipeThrough } from '@atproto/xrpc-server'
 
-export interface QueryParams {
-  id: number
+export interface QueryParams {}
+
+export interface InputSchema {
+  /** The DID to reserve a key for. */
+  did?: string
+  [k: string]: unknown
 }
 
-export type InputSchema = undefined
-export type OutputSchema = ComAtprotoAdminDefs.ReportViewDetail
-export type HandlerInput = undefined
+export interface OutputSchema {
+  /** The public key for the reserved signing key, in did:key serialization. */
+  signingKey: string
+  [k: string]: unknown
+}
+
+export interface HandlerInput {
+  encoding: 'application/json'
+  body: InputSchema
+}
 
 export interface HandlerSuccess {
   encoding: 'application/json'
@@ -28,7 +38,7 @@ export interface HandlerError {
   message?: string
 }
 
-export type HandlerOutput = HandlerError | HandlerSuccess
+export type HandlerOutput = HandlerError | HandlerSuccess | HandlerPipeThrough
 export type HandlerReqCtx<HA extends HandlerAuth = never> = {
   auth: HA
   params: QueryParams

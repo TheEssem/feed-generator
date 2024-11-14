@@ -6,34 +6,25 @@ import { ValidationResult, BlobRef } from '@atproto/lexicon'
 import { lexicons } from '../../../../lexicons'
 import { isObj, hasProp } from '../../../../util'
 import { CID } from 'multiformats/cid'
-import { HandlerAuth } from '@atproto/xrpc-server'
-import * as ComAtprotoAdminDefs from './defs'
+import { HandlerAuth, HandlerPipeThrough } from '@atproto/xrpc-server'
+import * as AppBskyFeedDefs from './defs'
 
 export interface QueryParams {
-  subject?: string
-  ignoreSubjects?: string[]
-  /** Get all reports that were actioned by a specific moderator */
-  actionedBy?: string
-  /** Filter reports made by one or more DIDs */
-  reporters?: string[]
-  resolved?: boolean
-  actionType?:
-    | 'com.atproto.admin.defs#takedown'
-    | 'com.atproto.admin.defs#flag'
-    | 'com.atproto.admin.defs#acknowledge'
-    | 'com.atproto.admin.defs#escalate'
-    | (string & {})
+  /** Reference (AT-URI) of post record */
+  uri: string
+  /** If supplied, filters to quotes of specific version (by CID) of the post record. */
+  cid?: string
   limit: number
   cursor?: string
-  /** Reverse the order of the returned records? when true, returns reports in chronological order */
-  reverse?: boolean
 }
 
 export type InputSchema = undefined
 
 export interface OutputSchema {
+  uri: string
+  cid?: string
   cursor?: string
-  reports: ComAtprotoAdminDefs.ReportView[]
+  posts: AppBskyFeedDefs.PostView[]
   [k: string]: unknown
 }
 
@@ -50,7 +41,7 @@ export interface HandlerError {
   message?: string
 }
 
-export type HandlerOutput = HandlerError | HandlerSuccess
+export type HandlerOutput = HandlerError | HandlerSuccess | HandlerPipeThrough
 export type HandlerReqCtx<HA extends HandlerAuth = never> = {
   auth: HA
   params: QueryParams

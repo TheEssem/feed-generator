@@ -6,37 +6,26 @@ import { ValidationResult, BlobRef } from '@atproto/lexicon'
 import { lexicons } from '../../../../lexicons'
 import { isObj, hasProp } from '../../../../util'
 import { CID } from 'multiformats/cid'
-import { HandlerAuth } from '@atproto/xrpc-server'
-import * as AppBskyFeedDefs from '../feed/defs'
+import { HandlerAuth, HandlerPipeThrough } from '@atproto/xrpc-server'
 
-export interface QueryParams {
-  limit: number
-  cursor?: string
-}
+export interface QueryParams {}
 
-export type InputSchema = undefined
-
-export interface OutputSchema {
-  cursor?: string
-  feed: AppBskyFeedDefs.SkeletonFeedPost[]
+export interface InputSchema {
+  priority: boolean
   [k: string]: unknown
 }
 
-export type HandlerInput = undefined
-
-export interface HandlerSuccess {
+export interface HandlerInput {
   encoding: 'application/json'
-  body: OutputSchema
-  headers?: { [key: string]: string }
+  body: InputSchema
 }
 
 export interface HandlerError {
   status: number
   message?: string
-  error?: 'UnknownFeed'
 }
 
-export type HandlerOutput = HandlerError | HandlerSuccess
+export type HandlerOutput = HandlerError | void
 export type HandlerReqCtx<HA extends HandlerAuth = never> = {
   auth: HA
   params: QueryParams
