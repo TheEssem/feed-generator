@@ -9,29 +9,35 @@ import { createDb, Database, migrateToLatest } from './db'
 import { FirehoseSubscription } from './subscription'
 import { AppContext, Config } from './config'
 import wellKnown from './well-known'
+import { createRedis } from './db/redis'
+import type { RedisClientType, RedisDefaultModules } from 'redis'
 
 export class FeedGenerator {
   public app: express.Application
   public server?: http.Server
   public db: Database
+  public redis: RedisClientType<RedisDefaultModules, {}, {}>
   public firehose: FirehoseSubscription
   public cfg: Config
 
   constructor(
     app: express.Application,
     db: Database,
+    redis: RedisClientType<RedisDefaultModules, {}, {}>,
     firehose: FirehoseSubscription,
     cfg: Config,
   ) {
     this.app = app
     this.db = db
+    this.redis = redis
     this.firehose = firehose
     this.cfg = cfg
   }
 
-  static create(cfg: Config) {
+  static async create(cfg: Config) {
     const app = express()
     const db = createDb(cfg.sqliteLocation)
+    const redis = await createRedis()
 
     const didCache = new MemoryCache()
     const didResolver = new DidResolver({
@@ -39,7 +45,7 @@ export class FeedGenerator {
       didCache,
     })
 
-    const firehose = new FirehoseSubscription(db, cfg.subscriptionEndpoint, didResolver)
+    const firehose = new FirehoseSubscription(db, redis, cfg.subscriptionEndpoint, didResolver)
 
     const server = createServer({
       validateResponse: true,
@@ -51,6 +57,7 @@ export class FeedGenerator {
     })
     const ctx: AppContext = {
       db,
+      redis,
       didResolver,
       cfg,
     }
@@ -59,7 +66,7 @@ export class FeedGenerator {
     app.use(server.xrpc.router)
     app.use(wellKnown(ctx))
 
-    return new FeedGenerator(app, db, firehose, cfg)
+    return new FeedGenerator(app, db, redis, firehose, cfg)
   }
 
   async start(): Promise<http.Server> {

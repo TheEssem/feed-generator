@@ -4,12 +4,13 @@ import type { Record as PostRecord } from '../lexicon/types/app/bsky/feed/post'
 import type { Database } from '../db'
 import type { DidResolver } from '@atproto/identity'
 import { WebSocket, type MessageEvent } from 'ws'
+import type { RedisClientType, RedisDefaultModules } from 'redis'
 
 export abstract class FirehoseSubscriptionBase {
   public sock: WebSocket
   public baseUrl: URL
 
-  constructor(public db: Database, public baseURL: string, public didResolver: DidResolver) {
+  constructor(public db: Database, public redis: RedisClientType<RedisDefaultModules, {}, {}>, public baseURL: string, public didResolver: DidResolver) {
     this.didResolver = didResolver
     this.baseUrl = new URL(baseURL)
   }

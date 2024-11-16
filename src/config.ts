@@ -1,8 +1,10 @@
-import { Database } from './db'
-import { DidResolver } from '@atproto/identity'
+import type { Database } from './db'
+import type { RedisClientType, RedisDefaultModules } from 'redis'
+import type { DidResolver } from '@atproto/identity'
 
 export type AppContext = {
   db: Database
+  redis: RedisClientType<RedisDefaultModules, {}, {}>
   didResolver: DidResolver
   cfg: Config
 }
