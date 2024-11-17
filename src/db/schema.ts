@@ -8,6 +8,7 @@ export type Post = {
   cid: string
   indexedAt: string
   pds?: string
+  pdsBase?: string
 }
 
 export type SubState = {

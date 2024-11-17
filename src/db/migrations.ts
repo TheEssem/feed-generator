@@ -1,4 +1,5 @@
-import { Kysely, Migration, MigrationProvider } from 'kysely'
+import type { Kysely, Migration, MigrationProvider } from 'kysely'
+import type { DatabaseSchema } from './schema'
 
 const migrations: Record<string, Migration> = {}
 
@@ -40,6 +41,38 @@ migrations['002'] = {
   async down(db: Kysely<unknown>) {
     await db.schema
       .dropIndex('idx_post_pds_indexedAt')
+      .execute()
+  },
+}
+
+migrations['003'] = {
+  async up(db: Kysely<Omit<DatabaseSchema, "pdsBase">>) {
+    await db.schema
+      .alterTable('post')
+      .addColumn('pdsBase', 'varchar')
+      .execute()
+    const pdsLinks = await db
+      .selectFrom('post')
+      .select(['uri', 'pds'])
+      .execute()
+    for (const link of pdsLinks) {
+      if (!link.pds) continue
+      const url = new URL(link.pds)
+      const splitDomain = url.hostname.split(".")
+      const pdsBase = `${splitDomain[splitDomain.length - 2]}.${splitDomain[splitDomain.length - 1]}`
+      await db
+        .updateTable('post')
+        .set({
+          pdsBase
+        })
+        .where('uri', '=', link.uri)
+        .execute()
+    }
+  },
+  async down(db: Kysely<Omit<DatabaseSchema, "pdsBase">>) {
+    await db.schema
+      .alterTable('post')
+      .dropColumn('pdsBase')
       .execute()
   },
 }

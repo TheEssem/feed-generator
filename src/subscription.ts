@@ -27,10 +27,14 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     if (event.commit.operation === CommitType.Create) {
       if (!event.commit.record) return
       if (!isPost(event.commit.record)) return
+      const url = new URL(pds)
+      const splitDomain = url.hostname.split(".")
+      const pdsBase = `${splitDomain[splitDomain.length - 2]}.${splitDomain[splitDomain.length - 1]}`
       const obj: Post = {
         uri: atUri,
         cid: event.commit.cid,
-        pds: pds,
+        pds,
+        pdsBase,
         indexedAt: new Date().toISOString(),
       }
       const dbResult = await this.db

@@ -2,13 +2,13 @@ import type { QueryParams } from '../lexicon/types/app/bsky/feed/getFeedSkeleton
 import type { AppContext } from '../config'
 
 // max 15 chars
-export const shortname = 'your-pds'
+export const shortname = 'non-bsky-pds'
 
 export const handler = async (ctx: AppContext, params: QueryParams, pds: string) => {
   let builder = ctx.db
     .selectFrom('post')
     .selectAll()
-    .where('pds', '=', pds)
+    .where('pdsBase', '!=', 'bsky.network')
     .orderBy('indexedAt', 'desc')
     .orderBy('cid', 'desc')
     .limit(params.limit)
