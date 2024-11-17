@@ -40,24 +40,22 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         .execute()
       if ((dbResult[0].numInsertedOrUpdatedRows ?? 0) > 0) {
         const pdsKey = `posts:${pds}`
-        await this.redis.lPush(pdsKey, atUri)
-        const len = await this.redis.lLen(pdsKey)
-        if (len >= 30000) {
-          const last = await this.redis.lRange(pdsKey, 29999, -1)
-          const indexed = await this.db
-            .selectFrom('post')
-            .select('indexedAt')
-            .where('uri', '=', last[0])
-            .execute()
-          if (indexed[0]?.indexedAt) {
+        const length = await this.redis.lPush(pdsKey, atUri)
+        if (length > 30000) {
+          const last = await this.redis.rPop(pdsKey)
+          await this.redis.lTrim(pdsKey, 0, 29999)
+          if (last) {
             await this.db
-            .deleteFrom('post')
-            .where('pds', '=', pds)
-            .where('indexedAt', '<', indexed[0].indexedAt)
-            .execute()
+              .deleteFrom('post')
+              .where('pds', '=', pds)
+              .where('indexedAt', '<', (eb) =>
+                eb.selectFrom('post')
+                  .select('indexedAt')
+                  .where('uri', '=', last)
+              )
+              .execute()
           }
         }
-        await this.redis.lTrim(pdsKey, 0, 29999)
       }
     } else if (event.commit.operation === CommitType.Delete) {
       await this.redis.lRem(`posts:${pds}`, 0, atUri)
