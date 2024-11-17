@@ -29,15 +29,19 @@ export default function (server: Server, ctx: AppContext) {
      * )
      */
 
-    const requesterDid = await validateAuth(
-      req,
-      ctx.cfg.serviceDid,
-      ctx.didResolver,
-    )
+    let pds = "";
 
-    const resolved = await ctx.didResolver.resolve(requesterDid)
-    const pds = resolved?.service?.[0].serviceEndpoint
-    if (typeof pds !== "string") throw new InvalidRequestError('No service endpoint', 'NoServiceEndpoint')
+    if (feedUri.rkey === "your-pds") {
+      const requesterDid = await validateAuth(
+        req,
+        ctx.cfg.serviceDid,
+        ctx.didResolver,
+      )
+  
+      const resolved = await ctx.didResolver.resolveAtprotoData(requesterDid)
+      pds = resolved.pds
+      if (typeof pds !== "string") throw new InvalidRequestError('No service endpoint', 'NoServiceEndpoint')
+    }
 
     //const pds = "https://oyster.us-east.host.bsky.network"
 
