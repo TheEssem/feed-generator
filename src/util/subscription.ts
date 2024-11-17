@@ -20,6 +20,12 @@ export abstract class FirehoseSubscriptionBase {
   async run(subscriptionReconnectDelay: number) {
     const url = await this.createUrl()
     this.sock = new WebSocket(url)
+    this.sock.onclose = () => {
+      setTimeout(
+        () => this.run(subscriptionReconnectDelay),
+        subscriptionReconnectDelay,
+      )
+    }
     this.sock.onerror = ({ error }) => {
       console.error('repo subscription errored', error)
       setTimeout(
