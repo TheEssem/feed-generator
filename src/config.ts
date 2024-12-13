@@ -18,4 +18,5 @@ export type Config = {
   serviceDid: string
   publisherDid: string
   subscriptionReconnectDelay: number
+  plcDir: string
 }
