@@ -39,7 +39,7 @@ export class FeedGenerator {
     const db = createDb(cfg.sqliteLocation)
     const redis = await createRedis()
 
-    const didCache = new MemoryCache()
+    const didCache = new MemoryCache(900000, 1800000)
     const didResolver = new DidResolver({
       plcUrl: cfg.plcDir,
       didCache,
