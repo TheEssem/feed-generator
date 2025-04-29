@@ -1,16 +1,15 @@
 import SqliteDb from 'better-sqlite3'
-import { Kysely, Migrator, PostgresDialect, SqliteDialect } from 'kysely'
-import { Pool } from 'pg'
+import { Kysely, Migrator, SqliteDialect } from 'kysely'
+import { PostgresJSDialect } from 'kysely-postgres-js'
+import postgres from 'postgres'
 import { DatabaseSchema } from './schema'
 import { migrationProvider } from './migrations'
 
 export const createDb = (location: string, isPg: boolean): Database => {
   let dialect
   if (isPg) {
-    dialect = new PostgresDialect({
-      pool: new Pool({
-        connectionString: location,
-      })
+    dialect = new PostgresJSDialect({
+      postgres: postgres(location, { onnotice: () => {} }),
     })
   } else {
     dialect = new SqliteDialect({
