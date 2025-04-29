@@ -37,17 +37,30 @@ export abstract class FirehoseSubscriptionBase {
   }
 
   async updateCursor(cursor: bigint) {
-    await this.db
-      .updateTable('sub_state')
-      .set({ cursor })
+    const state = await this.db
+      .selectFrom('sub_state')
+      .select(['service', 'cursor'])
       .where('service', '=', this.baseUrl.toString())
-      .execute()
+      .executeTakeFirst()
+
+    if (state) {
+      await this.db
+        .updateTable('sub_state')
+        .set({ cursor })
+        .where('service', '=', this.baseUrl.toString())
+        .execute()
+    } else {
+      await this.db
+        .insertInto('sub_state')
+        .values({ cursor, service: this.baseUrl.toString() })
+        .execute()
+    }
   }
 
   async getCursor(): Promise<{ cursor?: bigint }> {
     const res = await this.db
       .selectFrom('sub_state')
-      .selectAll()
+      .select('cursor')
       .where('service', '=', this.baseUrl.toString())
       .executeTakeFirst()
     return res ? { cursor: res.cursor } : {}
