@@ -14,6 +14,8 @@ export type Config = {
   listenhost: string
   hostname: string
   sqliteLocation: string
+  pgUrl?: string
+  dbType: string
   subscriptionEndpoint: string
   serviceDid: string
   publisherDid: string

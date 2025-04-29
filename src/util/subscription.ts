@@ -36,7 +36,7 @@ export abstract class FirehoseSubscriptionBase {
     this.sock.onmessage = (evt) => this.handleEvent(evt)
   }
 
-  async updateCursor(cursor: number) {
+  async updateCursor(cursor: bigint) {
     await this.db
       .updateTable('sub_state')
       .set({ cursor })
@@ -44,7 +44,7 @@ export abstract class FirehoseSubscriptionBase {
       .execute()
   }
 
-  async getCursor(): Promise<{ cursor?: number }> {
+  async getCursor(): Promise<{ cursor?: bigint }> {
     const res = await this.db
       .selectFrom('sub_state')
       .selectAll()

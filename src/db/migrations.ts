@@ -21,7 +21,7 @@ migrations['001'] = {
     await db.schema
       .createTable('sub_state')
       .addColumn('service', 'varchar', (col) => col.primaryKey())
-      .addColumn('cursor', 'integer', (col) => col.notNull())
+      .addColumn('cursor', 'bigint', (col) => col.notNull())
       .execute()
   },
   async down(db: Kysely<unknown>) {

@@ -13,7 +13,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
 					| IdentityEvent;
     this.count++
     if (this.count === 1000) {
-      await this.updateCursor(event.time_us)
+      await this.updateCursor(BigInt(event.time_us))
       this.count = 0
     }
     if (event.kind !== "commit") return

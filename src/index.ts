@@ -10,6 +10,8 @@ const run = async () => {
     port: maybeInt(process.env.FEEDGEN_PORT) ?? 3000,
     listenhost: maybeStr(process.env.FEEDGEN_LISTENHOST) ?? 'localhost',
     sqliteLocation: maybeStr(process.env.FEEDGEN_SQLITE_LOCATION) ?? ':memory:',
+    pgUrl: maybeStr(process.env.FEEDGEN_PG_URL),
+    dbType: maybeStr(process.env.FEEDGEN_DB_TYPE) ?? 'sqlite',
     subscriptionEndpoint:
       maybeStr(process.env.FEEDGEN_SUBSCRIPTION_ENDPOINT) ??
       'wss://bsky.network',

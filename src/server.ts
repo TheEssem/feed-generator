@@ -36,7 +36,12 @@ export class FeedGenerator {
 
   static async create(cfg: Config) {
     const app = express()
-    const db = createDb(cfg.sqliteLocation)
+    let db: Database
+    if (cfg.dbType === "pg" && cfg.pgUrl) {
+      db = createDb(cfg.pgUrl, true)
+    } else {
+      db = createDb(cfg.sqliteLocation, false)
+    }
     const redis = await createRedis()
 
     const didCache = new MemoryCache(900000, 1800000)
