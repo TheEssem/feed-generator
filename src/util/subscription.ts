@@ -9,10 +9,12 @@ import type { RedisClientType, RedisDefaultModules } from 'redis'
 export abstract class FirehoseSubscriptionBase {
   public sock: WebSocket
   public baseUrl: URL
+  public connUrl: URL
 
   constructor(public db: Database, public redis: RedisClientType<RedisDefaultModules, {}, {}>, public baseURL: string, public didResolver: DidResolver) {
     this.didResolver = didResolver
     this.baseUrl = new URL(baseURL)
+    this.connUrl = new URL(baseURL)
   }
 
   abstract handleEvent(evt: MessageEvent): Promise<void>
@@ -67,9 +69,9 @@ export abstract class FirehoseSubscriptionBase {
   }
 
   private async createUrl() {
-    const { cursor } = await this.getCursor()
-    const url = this.baseUrl
+    const url = this.connUrl
     url.searchParams.set("wantedCollections", ids.AppBskyFeedPost)
+    const { cursor } = await this.getCursor()
     if (cursor) url.searchParams.set("cursor", cursor.toString())
     return url.toString()
   }
