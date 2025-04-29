@@ -84,16 +84,8 @@ migrations['004'] = {
       .on('post')
       .columns(['pdsBase', 'indexedAt'])
       .execute()
-    await db.schema
-      .dropIndex('idx_post_pds_indexedAt')
-      .execute()
   },
   async down(db: Kysely<unknown>) {
-    await db.schema
-      .createIndex('idx_post_pds_indexedAt')
-      .on('post')
-      .columns(['pds', 'indexedAt'])
-      .execute()
     await db.schema
       .dropIndex('idx_post_pdsBase_indexedAt')
       .execute()
