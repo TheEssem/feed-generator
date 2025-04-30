@@ -6,6 +6,7 @@ import type { Post } from './db/schema'
 
 export class FirehoseSubscription extends FirehoseSubscriptionBase {
   public count = 0
+  public lock = false
   async handleEvent(evt: MessageEvent) {
     const event = JSON.parse(evt.data.toString()) as
 					| CommitEvent<"app.bsky.feed.post">
@@ -49,12 +50,14 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         if (length > 30000) {
           const last = await this.redis.rPop(pdsKey)
           await this.redis.lTrim(pdsKey, 0, 29999)
-          if (last) {
+          if (last && !this.lock) {
+            this.lock = true
             await this.db
               .deleteFrom('post')
               .where('pds', '=', pds)
               .where('indexedAt', '<', last.split(';')[1])
               .execute()
+            this.lock = false
           }
         }
       }
