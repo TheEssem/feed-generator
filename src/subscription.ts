@@ -30,12 +30,13 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       const url = new URL(pds)
       const splitDomain = url.hostname.split(".")
       const pdsBase = `${splitDomain[splitDomain.length - 2]}.${splitDomain[splitDomain.length - 1]}`
+      const indexedAt = new Date().toISOString()
       const obj: Post = {
         uri: atUri,
         cid: event.commit.cid,
         pds,
         pdsBase,
-        indexedAt: new Date().toISOString(),
+        indexedAt,
       }
       const dbResult = await this.db
         .insertInto('post')
@@ -44,7 +45,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         .execute()
       if ((dbResult[0].numInsertedOrUpdatedRows ?? 0) > 0) {
         const pdsKey = `posts:${pds}`
-        const length = await this.redis.lPush(pdsKey, atUri)
+        const length = await this.redis.lPush(pdsKey, `${atUri};${indexedAt}`)
         if (length > 30000) {
           const last = await this.redis.rPop(pdsKey)
           await this.redis.lTrim(pdsKey, 0, 29999)
@@ -52,21 +53,18 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
             await this.db
               .deleteFrom('post')
               .where('pds', '=', pds)
-              .where('indexedAt', '<', (eb) =>
-                eb.selectFrom('post')
-                  .select('indexedAt')
-                  .where('uri', '=', last)
-              )
+              .where('indexedAt', '<', last.split(';')[1])
               .execute()
           }
         }
       }
     } else if (event.commit.operation === CommitType.Delete) {
-      await this.redis.lRem(`posts:${pds}`, 0, atUri)
-      await this.db
+      const post = await this.db
         .deleteFrom('post')
         .where('uri', '=', atUri)
-        .execute()
+        .returning('indexedAt')
+        .executeTakeFirst()
+      if (post) await this.redis.lRem(`posts:${pds}`, 0, `${atUri};${post.indexedAt}`)
     }
   }
 }
