@@ -1333,6 +1333,18 @@ iso-datestring-validator@^2.2.2:
   resolved "https://registry.yarnpkg.com/iso-datestring-validator/-/iso-datestring-validator-2.2.2.tgz#2daa80d2900b7a954f9f731d42f96ee0c19a6895"
   integrity sha512-yLEMkBbLZTlVQqOnQ4FiMujR6T4DEcCb1xizmvXS+OxuhwcbtynoosRzdMA69zZCShCNAbi+gJ71FxZBBXx1SA==
 
+kysely-bun-worker@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/kysely-bun-worker/-/kysely-bun-worker-1.2.1.tgz#fd562276d2d50f405a27230878571f65fa9c5948"
+  integrity sha512-mhQ8MQThL8gdyqGf6Jh3GnGrNaaQOxQxplust58kPGN8vB3qov+3W0laEkNacN0ShCBLb8vkLcYK0ShksPlBbQ==
+  dependencies:
+    kysely-generic-sqlite "1.2.1"
+
+kysely-generic-sqlite@1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/kysely-generic-sqlite/-/kysely-generic-sqlite-1.2.1.tgz#81c4ac9d5952db25591ed1f3c86ee2dd1f06ab44"
+  integrity sha512-/Bs3/Uktn04nQ9g/4oSphLMEtSHkS5+j5hbKjK5gMqXQfqr/v3V3FKtoN4pLTmo2W35hNdrIpQnBukGL1zZc6g==
+
 kysely-postgres-js@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/kysely-postgres-js/-/kysely-postgres-js-2.0.0.tgz#f2e79f2e14c2c3065052722bdc89014691080ceb"

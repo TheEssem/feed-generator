@@ -1,5 +1,6 @@
 import SqliteDb from 'better-sqlite3'
 import { Kysely, Migrator, SqliteDialect } from 'kysely'
+import { BunWorkerDialect } from 'kysely-bun-worker'
 import { PostgresJSDialect } from 'kysely-postgres-js'
 import postgres from 'postgres'
 import { DatabaseSchema } from './schema'
@@ -10,6 +11,10 @@ export const createDb = (location: string, isPg: boolean): Database => {
   if (isPg) {
     dialect = new PostgresJSDialect({
       postgres: postgres(location, { onnotice: () => {} }),
+    })
+  } else if (process.versions.bun) {
+    dialect = new BunWorkerDialect({
+      url: location,
     })
   } else {
     dialect = new SqliteDialect({
