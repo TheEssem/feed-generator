@@ -52,11 +52,14 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
           await this.redis.lTrim(pdsKey, 0, 29999)
           if (last && !this.lock) {
             this.lock = true
-            await this.db
-              .deleteFrom('post')
-              .where('pds', '=', pds)
-              .where('indexedAt', '<', last.split(';')[1])
-              .execute()
+            const indexTime = last.split(';')[1]
+            if (indexTime?.trim()) {
+              await this.db
+                .deleteFrom('post')
+                .where('pds', '=', pds)
+                .where('indexedAt', '<', indexTime)
+                .execute()
+            }
             this.lock = false
           }
         }
