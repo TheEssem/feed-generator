@@ -1,10 +1,17 @@
-import SqliteDb from 'better-sqlite3'
 import { Kysely, Migrator, SqliteDialect } from 'kysely'
-import { BunWorkerDialect } from 'kysely-bun-worker'
 import { PostgresJSDialect } from 'kysely-postgres-js'
 import postgres from 'postgres'
 import { DatabaseSchema } from './schema'
 import { migrationProvider } from './migrations'
+
+let sqlite
+
+if (process.versions.bun) {
+  const { BunWorkerDialect } = require('kysely-bun-worker')
+  sqlite = BunWorkerDialect
+} else {
+  sqlite = require('better-sqlite3')
+}
 
 export const createDb = (location: string, isPg: boolean): Database => {
   let dialect
@@ -13,12 +20,12 @@ export const createDb = (location: string, isPg: boolean): Database => {
       postgres: postgres(location, { onnotice: () => {} }),
     })
   } else if (process.versions.bun) {
-    dialect = new BunWorkerDialect({
+    dialect = new sqlite({
       url: location,
     })
   } else {
     dialect = new SqliteDialect({
-      database: new SqliteDb(location),
+      database: new sqlite(location),
     })
   }
   return new Kysely<DatabaseSchema>({
