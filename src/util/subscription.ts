@@ -71,8 +71,8 @@ export abstract class FirehoseSubscriptionBase {
   private async createUrl() {
     const url = this.connUrl
     url.searchParams.set("wantedCollections", ids.AppBskyFeedPost)
-    const { cursor } = await this.getCursor()
-    if (cursor) url.searchParams.set("cursor", cursor.toString())
+    /*const { cursor } = await this.getCursor()
+    if (cursor) url.searchParams.set("cursor", cursor.toString())*/
     return url.toString()
   }
 }
