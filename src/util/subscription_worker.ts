@@ -6,6 +6,9 @@ import type { Database, Statement } from "bun:sqlite"
 import type { Post } from "../db/schema"
 import { isPost } from "./subscription"
 
+// prevents TS errors
+declare var self: Worker;
+
 let db: Database
 let redis: RedisClientType<RedisDefaultModules, {}, {}>
 
