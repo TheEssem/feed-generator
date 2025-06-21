@@ -18,10 +18,12 @@ export function runAlgo(algo: string, ctx: AppContext, params: QueryParams, pds?
     })
     worker.addEventListener("message", event => {
       resolve(event.data)
+      worker.terminate()
     })
 
     worker.onerror = (ev) => {
       reject(ev)
+      worker.terminate()
     }
   })
 }
