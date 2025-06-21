@@ -6,7 +6,7 @@ import {
 import * as yourPds from './your-pds'
 import * as nonBskyPds from './non-bsky-pds'
 
-type AlgoHandler = (ctx: AppContext, params: QueryParams, pds: string) => Promise<AlgoOutput>
+export type AlgoHandler = (ctx: Partial<AppContext>, params: QueryParams, pds: string) => Promise<AlgoOutput>
 
 const algos: Record<string, AlgoHandler> = {
   [yourPds.shortname]: yourPds.handler,

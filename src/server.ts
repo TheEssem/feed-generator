@@ -5,7 +5,9 @@ import { DidResolver, MemoryCache } from '@atproto/identity'
 import { createServer } from './lexicon'
 import feedGeneration from './methods/feed-generation'
 import describeGenerator from './methods/describe-generator'
-import { createDb, Database, migrateToLatest } from './db'
+//import { createDb, Database, migrateToLatest } from './db'
+import { createDb } from './db/new'
+import type { Database } from 'bun:sqlite'
 import { FirehoseSubscription } from './subscription'
 import { AppContext, Config } from './config'
 import wellKnown from './well-known'
@@ -36,12 +38,12 @@ export class FeedGenerator {
 
   static async create(cfg: Config) {
     const app = express()
-    let db: Database
-    if (cfg.dbType === "pg" && cfg.pgUrl) {
+    let db = createDb(cfg.sqliteLocation)
+    /*if (cfg.dbType === "pg" && cfg.pgUrl) {
       db = createDb(cfg.pgUrl, true)
     } else {
       db = createDb(cfg.sqliteLocation, false)
-    }
+    }*/
     const redis = await createRedis()
 
     const didCache = new MemoryCache(900000, 1800000)
@@ -62,7 +64,6 @@ export class FeedGenerator {
     })
     const ctx: AppContext = {
       db,
-      redis,
       didResolver,
       cfg,
     }
@@ -75,7 +76,7 @@ export class FeedGenerator {
   }
 
   async start(): Promise<http.Server> {
-    await migrateToLatest(this.db)
+    //await migrateToLatest(this.db)
     this.firehose.run(this.cfg.subscriptionReconnectDelay)
     this.server = this.app.listen(this.cfg.port, this.cfg.listenhost)
     await events.once(this.server, 'listening')

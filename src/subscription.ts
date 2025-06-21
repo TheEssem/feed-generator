@@ -12,11 +12,11 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
 					| CommitEvent<"app.bsky.feed.post">
 					| AccountEvent
 					| IdentityEvent;
-    this.count++
+    /*this.count++
     if (this.count >= 1000) {
       await this.updateCursor(BigInt(event.time_us))
       this.count = 0
-    }
+    }*/
     if (event.kind !== "commit") return
     if (!event.commit?.collection || !event.commit.rkey || !event.commit.rev) return
     if (event.commit.collection !== ids.AppBskyFeedPost) return
@@ -32,19 +32,22 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       const splitDomain = url.hostname.split(".")
       const pdsBase = `${splitDomain[splitDomain.length - 2]}.${splitDomain[splitDomain.length - 1]}`
       const indexedAt = new Date().toISOString()
-      const obj: Post = {
+      /*const obj: Post = {
         uri: atUri,
         cid: event.commit.cid,
         pds,
         pdsBase,
         indexedAt,
-      }
-      const dbResult = await this.db
+      }*/
+      /*const dbQuery = this.db
         .insertInto('post')
         .values([obj])
         .onConflict((oc) => oc.doNothing())
-        .execute()
-      if ((dbResult[0].numInsertedOrUpdatedRows ?? 0) > 0) {
+      console.log(dbQuery.compile().sql)
+      const dbResult = await dbQuery.execute()*/
+      const dbResult = this.insertPost.run(atUri, event.commit.cid, pds, pdsBase, indexedAt)
+      //console.log("added")
+      if ((dbResult.changes ?? 0) > 0) {
         const pdsKey = `posts:${pds}`
         const length = await this.redis.lPush(pdsKey, `${atUri};${indexedAt}`)
         if (length > 30000) {
@@ -54,22 +57,26 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
             this.lock = true
             const indexTime = last.split(';')[1]
             if (indexTime?.trim()) {
-              await this.db
+              /*await this.db
                 .deleteFrom('post')
                 .where('pds', '=', pds)
                 .where('indexedAt', '<', indexTime)
-                .execute()
+                .execute()*/
+              this.removePostByPDS.run(pds, indexTime)
             }
             this.lock = false
           }
         }
       }
     } else if (event.commit.operation === CommitType.Delete) {
-      const post = await this.db
+      /*const query = this.db
         .deleteFrom('post')
         .where('uri', '=', atUri)
         .returning('indexedAt')
-        .executeTakeFirst()
+      console.log(query.compile().sql)
+      const post = await query.executeTakeFirst()*/
+      const post = this.removePostByURL.get(atUri)
+      //console.log("removed")
       if (post) await this.redis.lRem(`posts:${pds}`, 0, `${atUri};${post.indexedAt}`)
     }
   }

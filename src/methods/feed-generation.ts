@@ -4,6 +4,7 @@ import { AppContext } from '../config'
 import algos from '../algos'
 import { validateAuth } from '../auth'
 import { AtUri } from '@atproto/syntax'
+import { runAlgo } from './algo-thread'
 
 export default function (server: Server, ctx: AppContext) {
   server.app.bsky.feed.getFeedSkeleton(async ({ params, req }) => {
@@ -45,7 +46,7 @@ export default function (server: Server, ctx: AppContext) {
 
     //const pds = "https://oyster.us-east.host.bsky.network"
 
-    const body = await algo(ctx, params, pds)
+    const body = await runAlgo(feedUri.rkey, ctx, params, pds)
     return {
       encoding: 'application/json',
       body: body,

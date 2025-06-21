@@ -1,10 +1,8 @@
-import type { Database } from './db'
-import type { RedisClientType, RedisDefaultModules } from 'redis'
+import type { Database } from 'bun:sqlite'
 import type { DidResolver } from '@atproto/identity'
 
 export type AppContext = {
   db: Database
-  redis: RedisClientType<RedisDefaultModules, {}, {}>
   didResolver: DidResolver
   cfg: Config
 }
