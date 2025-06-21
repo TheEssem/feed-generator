@@ -19,8 +19,8 @@ export const handler = async (ctx: AppContext, params: QueryParams, pds: string)
     .orderBy('cid', 'desc')
     .limit(params.limit)*/
   if (!dbQuery) {
-    dbQuery = ctx.db.query(`SELECT * FROM "post" WHERE "pds" = ?1 ORDER BY "indexedAt" DESC, "cid" DESC LIMIT ?2;`)
-    dbQueryWhere = ctx.db.query(`SELECT * FROM "post" WHERE "pds" = ?1 AND "indexedAt" < ?2 ORDER BY "indexedAt" DESC, "cid" DESC LIMIT ?3;`)
+    dbQuery = ctx.db.query(`SELECT uri, indexedAt FROM "post" WHERE "pds" = ?1 ORDER BY "indexedAt" DESC, "cid" DESC LIMIT ?2;`)
+    dbQueryWhere = ctx.db.query(`SELECT uri, indexedAt FROM "post" WHERE "pds" = ?1 AND "indexedAt" < ?2 ORDER BY "indexedAt" DESC, "cid" DESC LIMIT ?3;`)
   }
 
   let res: Post[]

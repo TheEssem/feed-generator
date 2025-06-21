@@ -21,12 +21,12 @@ export const handler = async (ctx: AppContext, params: QueryParams, pds: string)
     .orderBy('cid', 'desc')
     .limit(params.limit)*/
   if (!dbQuery) {
-    dbQuery = ctx.db.query(`SELECT * FROM "post"
+    dbQuery = ctx.db.query(`SELECT uri, indexedAt FROM "post"
       WHERE "pdsBase" != 'bsky.network'
       AND "pdsBase" != 'brid.gy'
       AND "pdsBase" != 'extwitter.link'
       ORDER BY "indexedAt" DESC, "cid" DESC LIMIT ?1;`)
-    dbQueryWhere = ctx.db.query(`SELECT * FROM "post"
+    dbQueryWhere = ctx.db.query(`SELECT uri, indexedAt FROM "post"
       WHERE "pdsBase" != 'bsky.network'
       AND "pdsBase" != 'brid.gy'
       AND "pdsBase" != 'extwitter.link'
