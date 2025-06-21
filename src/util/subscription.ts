@@ -1,27 +1,19 @@
 import { BlobRef } from '@atproto/lexicon'
 import { ids, lexicons } from '../lexicon/lexicons'
 import type { Record as PostRecord } from '../lexicon/types/app/bsky/feed/post'
-import type { Database, Statement } from 'bun:sqlite'
+import type { Database } from 'bun:sqlite'
 import type { DidResolver } from '@atproto/identity'
 import { WebSocket, type MessageEvent } from 'ws'
-import type { RedisClientType, RedisDefaultModules } from 'redis'
-import { Post } from '../db/schema'
 
 export abstract class FirehoseSubscriptionBase {
   public sock: WebSocket
   public baseUrl: URL
   public connUrl: URL
-  public insertPost: Statement<Post, string[]>
-  public removePostByURL: Statement<Post, string[]>
-  public removePostByPDS: Statement<Post, string[]>
 
-  constructor(public db: Database, public redis: RedisClientType<RedisDefaultModules, {}, {}>, public baseURL: string, public didResolver: DidResolver) {
+  constructor(public db: Database, public baseURL: string, public didResolver: DidResolver) {
     this.didResolver = didResolver
     this.baseUrl = new URL(baseURL)
     this.connUrl = new URL(baseURL)
-    this.insertPost = db.query(`INSERT INTO "post" ("uri", "cid", "pds", "pdsBase", "indexedAt") VALUES (?1, ?2, ?3, ?4, ?5) ON CONFLICT DO NOTHING;`)
-    this.removePostByURL = db.query(`DELETE FROM "post" WHERE "uri" = ?1 RETURNING "indexedAt";`)
-    this.removePostByPDS = db.query(`DELETE FROM "post" WHERE "pds" = ?1 AND "indexedAt" < ?2;`)
   }
 
   abstract handleEvent(evt: MessageEvent): Promise<void>

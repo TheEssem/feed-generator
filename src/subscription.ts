@@ -1,13 +1,38 @@
-import { FirehoseSubscriptionBase, isPost } from './util/subscription'
+import { FirehoseSubscriptionBase } from './util/subscription'
 import { ids } from './lexicon/lexicons'
 import type { MessageEvent } from 'ws'
 import { type CommitEvent, type AccountEvent, type IdentityEvent, CommitType } from './util/types'
 import type { Post } from './db/schema'
+import type { DidResolver } from '@atproto/identity'
+import type { Database, Statement } from 'bun:sqlite'
+import { join } from 'node:path'
 
 export class FirehoseSubscription extends FirehoseSubscriptionBase {
   public count = 0
   public lock = false
+  public dbWorker: Worker
+  public insertPost: Statement<Post, string[]>
+  public removePostByURL: Statement<Post, string[]>
+  public removePostByPDS: Statement<Post, string[]>
+  private workerReady = false
+
+  constructor(public db: Database, public sqliteLocation: string, public baseURL: string, public didResolver: DidResolver) {
+    super(db, baseURL, didResolver)
+    const workerName = join(__dirname, "util", "subscription_worker.ts")
+    this.dbWorker = new Worker(workerName)
+    this.dbWorker.addEventListener("open", () => {
+      this.dbWorker.postMessage({ op: 0, sqliteLocation })
+    })
+    this.dbWorker.addEventListener("message", (ev) => {
+      if (ev.data?.op === 0) this.workerReady = true
+    })
+    this.insertPost = db.query(`INSERT INTO "post" ("uri", "cid", "pds", "pdsBase", "indexedAt") VALUES (?1, ?2, ?3, ?4, ?5) ON CONFLICT DO NOTHING;`)
+    this.removePostByURL = db.query(`DELETE FROM "post" WHERE "uri" = ?1 RETURNING "indexedAt";`)
+    this.removePostByPDS = db.query(`DELETE FROM "post" WHERE "pds" = ?1 AND "indexedAt" < ?2;`)
+  }
+
   async handleEvent(evt: MessageEvent) {
+    if (!this.workerReady) return
     const event = JSON.parse(evt.data.toString()) as
 					| CommitEvent<"app.bsky.feed.post">
 					| AccountEvent
@@ -26,58 +51,18 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     const pds = resolved.pds
 
     if (event.commit.operation === CommitType.Create) {
-      if (!event.commit.record) return
-      if (!isPost(event.commit.record)) return
-      const url = new URL(pds)
-      const splitDomain = url.hostname.split(".")
-      const pdsBase = `${splitDomain[splitDomain.length - 2]}.${splitDomain[splitDomain.length - 1]}`
-      const indexedAt = new Date().toISOString()
-      /*const obj: Post = {
-        uri: atUri,
-        cid: event.commit.cid,
+      this.dbWorker.postMessage({
+        op: 1,
+        atUri,
         pds,
-        pdsBase,
-        indexedAt,
-      }*/
-      /*const dbQuery = this.db
-        .insertInto('post')
-        .values([obj])
-        .onConflict((oc) => oc.doNothing())
-      console.log(dbQuery.compile().sql)
-      const dbResult = await dbQuery.execute()*/
-      const dbResult = this.insertPost.run(atUri, event.commit.cid, pds, pdsBase, indexedAt)
-      //console.log("added")
-      if ((dbResult.changes ?? 0) > 0) {
-        const pdsKey = `posts:${pds}`
-        const length = await this.redis.lPush(pdsKey, `${atUri};${indexedAt}`)
-        if (length > 30000) {
-          const last = await this.redis.rPop(pdsKey)
-          await this.redis.lTrim(pdsKey, 0, 29999)
-          if (last && !this.lock) {
-            this.lock = true
-            const indexTime = last.split(';')[1]
-            if (indexTime?.trim()) {
-              /*await this.db
-                .deleteFrom('post')
-                .where('pds', '=', pds)
-                .where('indexedAt', '<', indexTime)
-                .execute()*/
-              this.removePostByPDS.run(pds, indexTime)
-            }
-            this.lock = false
-          }
-        }
-      }
+        commit: event.commit,
+      })
     } else if (event.commit.operation === CommitType.Delete) {
-      /*const query = this.db
-        .deleteFrom('post')
-        .where('uri', '=', atUri)
-        .returning('indexedAt')
-      console.log(query.compile().sql)
-      const post = await query.executeTakeFirst()*/
-      const post = this.removePostByURL.get(atUri)
-      //console.log("removed")
-      if (post) await this.redis.lRem(`posts:${pds}`, 0, `${atUri};${post.indexedAt}`)
+      this.dbWorker.postMessage({
+        op: 2,
+        atUri,
+        pds,
+      })
     }
   }
 }

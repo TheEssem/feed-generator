@@ -52,7 +52,7 @@ export class FeedGenerator {
       didCache,
     })
 
-    const firehose = new FirehoseSubscription(db, redis, cfg.subscriptionEndpoint, didResolver)
+    const firehose = new FirehoseSubscription(db, cfg.sqliteLocation, cfg.subscriptionEndpoint, didResolver)
 
     const server = createServer({
       validateResponse: true,
