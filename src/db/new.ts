@@ -5,5 +5,6 @@ export const createDb = (location: string): Database => {
   db.exec("PRAGMA journal_mode = WAL;");
   db.exec("PRAGMA synchronous = NORMAL;");
   db.exec(`CREATE INDEX IF NOT EXISTS cid_index_idx ON post(indexedAt, cid);`);
+  db.exec(`CREATE INDEX IF NOT EXISTS pds_index_idx ON post (pds, indexedAt);`);
   return db;
 }
