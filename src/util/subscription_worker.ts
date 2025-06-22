@@ -66,7 +66,7 @@ self.onmessage = async (event: MessageEvent) => {
     })
     // Estimated number of events coming through the jetstream per second is closer to 64 as of this commit
     if (postQueue.length > 127) {
-      insertPosts.immediate(postQueue.splice(0, 1024))
+      insertPosts.immediate(postQueue.splice(0, 128))
     }
     //console.log("added")
   } else if (event.data.op === 2) {
