@@ -2,18 +2,13 @@ import { FirehoseSubscriptionBase } from './util/subscription'
 import { ids } from './lexicon/lexicons'
 import type { MessageEvent } from 'ws'
 import { type CommitEvent, type AccountEvent, type IdentityEvent, CommitType } from './util/types'
-import type { Post } from './db/schema'
 import type { DidResolver } from '@atproto/identity'
-import type { Database, Statement } from 'bun:sqlite'
+import type { Database } from 'bun:sqlite'
 import { join } from 'node:path'
 
 export class FirehoseSubscription extends FirehoseSubscriptionBase {
   public count = 0
-  public lock = false
   public dbWorker: Worker
-  public insertPost: Statement<Post, string[]>
-  public removePostByURL: Statement<Post, string[]>
-  public removePostByPDS: Statement<Post, string[]>
   private workerReady = false
 
   constructor(public db: Database, public sqliteLocation: string, public baseURL: string, public didResolver: DidResolver) {
@@ -26,9 +21,7 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
     this.dbWorker.addEventListener("message", (ev) => {
       if (ev.data?.op === 0) this.workerReady = true
     })
-    this.insertPost = db.query(`INSERT INTO "post" ("uri", "cid", "pds", "pdsBase", "indexedAt") VALUES (?1, ?2, ?3, ?4, ?5) ON CONFLICT DO NOTHING;`)
-    this.removePostByURL = db.query(`DELETE FROM "post" WHERE "uri" = ?1 RETURNING "indexedAt";`)
-    this.removePostByPDS = db.query(`DELETE FROM "post" WHERE "pds" = ?1 AND "indexedAt" < ?2;`)
+    this.dbWorker.addEventListener("error", (ev) => console.error(ev))
   }
 
   async handleEvent(evt: MessageEvent) {
