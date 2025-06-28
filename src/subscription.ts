@@ -30,11 +30,11 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
 					| CommitEvent<"app.bsky.feed.post">
 					| AccountEvent
 					| IdentityEvent;
-    /*this.count++
+    this.count++
     if (this.count >= 1000) {
       await this.updateCursor(BigInt(event.time_us))
       this.count = 0
-    }*/
+    }
     if (event.kind !== "commit") return
     if (!event.commit?.collection || !event.commit.rkey || !event.commit.rev) return
     if (event.commit.collection !== ids.AppBskyFeedPost) return

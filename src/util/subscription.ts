@@ -1,19 +1,24 @@
 import { BlobRef } from '@atproto/lexicon'
 import { ids, lexicons } from '../lexicon/lexicons'
 import type { Record as PostRecord } from '../lexicon/types/app/bsky/feed/post'
-import type { Database } from 'bun:sqlite'
+import type { Database, Statement } from 'bun:sqlite'
 import type { DidResolver } from '@atproto/identity'
 import { WebSocket, type MessageEvent } from 'ws'
+import type { SubState } from '../db/schema'
 
 export abstract class FirehoseSubscriptionBase {
   public sock: WebSocket
   public baseUrl: URL
   public connUrl: URL
+  public subStateQuery: Statement<SubState, string[]>
+  public updateSubState: Statement<SubState, [bigint, string]>
 
   constructor(public db: Database, public baseURL: string, public didResolver: DidResolver) {
     this.didResolver = didResolver
     this.baseUrl = new URL(baseURL)
     this.connUrl = new URL(baseURL)
+    this.subStateQuery = this.db.query("SELECT service, cursor FROM sub_state WHERE service = ?")
+    this.updateSubState = this.db.query("UPDATE sub_state SET cursor = ? WHERE service = ?")
   }
 
   abstract handleEvent(evt: MessageEvent): Promise<void>
@@ -37,41 +42,26 @@ export abstract class FirehoseSubscriptionBase {
     this.sock.onmessage = (evt) => this.handleEvent(evt)
   }
 
-  /*async updateCursor(cursor: bigint) {
-    const state = await this.db
-      .selectFrom('sub_state')
-      .select(['service', 'cursor'])
-      .where('service', '=', this.baseUrl.toString())
-      .executeTakeFirst()
+  async updateCursor(cursor: bigint) {
+    const state = this.subStateQuery.get(this.baseUrl.toString())
 
     if (state) {
-      await this.db
-        .updateTable('sub_state')
-        .set({ cursor })
-        .where('service', '=', this.baseUrl.toString())
-        .execute()
+      this.updateSubState.run(cursor, this.baseUrl.toString())
     } else {
-      await this.db
-        .insertInto('sub_state')
-        .values({ cursor, service: this.baseUrl.toString() })
-        .execute()
+      this.db.prepare("INSERT INTO sub_state (cursor, service) VALUES (?, ?)").run(cursor, this.baseUrl.toString())
     }
   }
 
   async getCursor(): Promise<{ cursor?: bigint }> {
-    const res = await this.db
-      .selectFrom('sub_state')
-      .select('cursor')
-      .where('service', '=', this.baseUrl.toString())
-      .executeTakeFirst()
+    const res = this.subStateQuery.get(this.baseUrl.toString())
     return res ? { cursor: res.cursor } : {}
-  }*/
+  }
 
   private async createUrl() {
     const url = this.connUrl
     url.searchParams.set("wantedCollections", ids.AppBskyFeedPost)
-    /*const { cursor } = await this.getCursor()
-    if (cursor) url.searchParams.set("cursor", cursor.toString())*/
+    const { cursor } = await this.getCursor()
+    if (cursor) url.searchParams.set("cursor", cursor.toString())
     return url.toString()
   }
 }
