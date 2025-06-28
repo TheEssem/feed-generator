@@ -3,7 +3,7 @@ import { createDb } from "../db/new"
 import { createRedis } from '../db/redis'
 
 import type { Database, Statement } from "bun:sqlite"
-import type { Post } from "../db/schema"
+import type { Post, SubState } from "../db/schema"
 import { isPost } from "./subscription"
 
 // prevents TS errors
@@ -17,6 +17,8 @@ let insertPosts: CallableFunction & { immediate: (...args: any) => void; }
 let removePostByURL: Statement<Post, string[]>
 let removePostByPDS: Statement<Post, string[]>
 let removePosts: CallableFunction & { immediate: (...args: any) => void; }
+let subStateQuery: Statement<SubState, string[]>
+let updateSubState: Statement<SubState, [bigint, string]>
 
 const postQueue: Post[] = []
 const delQueue: {
@@ -55,6 +57,8 @@ self.onmessage = async (event: MessageEvent) => {
         if (dbResult) await redis.lRem(`posts:${post.pds}`, 0, `${post.uri};${dbResult.indexedAt}`)
       }
     })
+    subStateQuery = db.query("SELECT service, cursor FROM sub_state WHERE service = ?")
+    updateSubState = db.query("UPDATE sub_state SET cursor = ? WHERE service = ?")
     redis = await createRedis()
     postMessage({ op: 0 })
   } else if (event.data.op === 1) {
@@ -85,5 +89,13 @@ self.onmessage = async (event: MessageEvent) => {
       removePosts.immediate(delQueue.splice(0, 64))
     }
     //console.log("removed")
+  } else if (event.data.op === 3) {
+    const state = subStateQuery.get(event.data.baseUrl)
+
+    if (state) {
+      updateSubState.run(event.data.cursor, event.data.baseUrl)
+    } else {
+      db.prepare("INSERT INTO sub_state (cursor, service) VALUES (?, ?)").run(event.data.cursor, event.data.baseUrl)
+    }
   }
 }

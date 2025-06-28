@@ -31,9 +31,13 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
 					| AccountEvent
 					| IdentityEvent;
     this.count++
-    if (this.count >= 1000) {
-      await this.updateCursor(BigInt(event.time_us))
+    if (this.count >= 1024) {
       this.count = 0
+      this.dbWorker.postMessage({
+        op: 3,
+        baseUrl: this.baseUrl.toString(),
+        cursor: BigInt(event.time_us),
+      })
     }
     if (event.kind !== "commit") return
     if (!event.commit?.collection || !event.commit.rkey || !event.commit.rev) return

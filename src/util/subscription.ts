@@ -11,14 +11,12 @@ export abstract class FirehoseSubscriptionBase {
   public baseUrl: URL
   public connUrl: URL
   public subStateQuery: Statement<SubState, string[]>
-  public updateSubState: Statement<SubState, [bigint, string]>
 
   constructor(public db: Database, public baseURL: string, public didResolver: DidResolver) {
     this.didResolver = didResolver
     this.baseUrl = new URL(baseURL)
     this.connUrl = new URL(baseURL)
     this.subStateQuery = this.db.query("SELECT service, cursor FROM sub_state WHERE service = ?")
-    this.updateSubState = this.db.query("UPDATE sub_state SET cursor = ? WHERE service = ?")
   }
 
   abstract handleEvent(evt: MessageEvent): Promise<void>
@@ -42,7 +40,7 @@ export abstract class FirehoseSubscriptionBase {
     this.sock.onmessage = (evt) => this.handleEvent(evt)
   }
 
-  async updateCursor(cursor: bigint) {
+  /*async updateCursor(cursor: bigint) {
     const state = this.subStateQuery.get(this.baseUrl.toString())
 
     if (state) {
@@ -50,7 +48,7 @@ export abstract class FirehoseSubscriptionBase {
     } else {
       this.db.prepare("INSERT INTO sub_state (cursor, service) VALUES (?, ?)").run(cursor, this.baseUrl.toString())
     }
-  }
+  }*/
 
   async getCursor(): Promise<{ cursor?: bigint }> {
     const res = this.subStateQuery.get(this.baseUrl.toString())
