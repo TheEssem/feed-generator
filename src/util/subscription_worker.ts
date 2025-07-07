@@ -34,15 +34,15 @@ self.onmessage = async (event: MessageEvent) => {
       for (const post of posts) {
         const dbResult = insertPost.run(post.uri, post.cid, post.pds, post.pdsBase, post.indexedAt)
         if ((dbResult.changes ?? 0) > 0) {
-          const pdsKey = `posts:${event.data.pds}`
-          const length = await redis.lPush(pdsKey, `${event.data.atUri};${post.indexedAt}`)
+          const pdsKey = `posts:${post.pds}`
+          const length = await redis.lPush(pdsKey, `${post.uri};${post.indexedAt}`)
           if (length > 30000) {
             const last = await redis.rPop(pdsKey)
             await redis.lTrim(pdsKey, 0, 29999)
             if (last) {
               const indexTime = last.split(';')[1]
               if (indexTime?.trim()) {
-                removePostByPDS.run(event.data.pds, indexTime)
+                removePostByPDS.run(post.pds, indexTime)
               }
             }
           }
