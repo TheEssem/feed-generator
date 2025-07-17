@@ -13,15 +13,13 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
 
   constructor(public db: Database, public sqliteLocation: string, public baseURL: string, public didResolver: DidResolver) {
     super(db, baseURL, didResolver)
-    const workerName = join(__dirname, "util", "subscription_worker.ts")
-    this.dbWorker = new Worker(workerName)
-    this.dbWorker.addEventListener("open", () => {
-      this.dbWorker.postMessage({ op: 0, sqliteLocation })
-    })
+    const workerName = join(import.meta?.dirname ?? __dirname, "util", "subscription_worker.ts")
+    this.dbWorker = new Worker(`file://${workerName}`, { type: "module" })
     this.dbWorker.addEventListener("message", (ev) => {
       if (ev.data?.op === 0) this.workerReady = true
     })
     this.dbWorker.addEventListener("error", (ev) => console.error(ev))
+    this.dbWorker.postMessage({ op: 0, sqliteLocation })
   }
 
   async handleEvent(evt: MessageEvent) {

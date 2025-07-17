@@ -1,5 +1,5 @@
-import http from 'http'
-import events from 'events'
+import http from 'node:http'
+import events from 'node:events'
 import express from 'express'
 import { DidResolver, MemoryCache } from '@atproto/identity'
 import { createServer } from './lexicon'
@@ -38,7 +38,7 @@ export class FeedGenerator {
 
   static async create(cfg: Config) {
     const app = express()
-    let db = createDb(cfg.sqliteLocation)
+    let db = await createDb(cfg.sqliteLocation)
     /*if (cfg.dbType === "pg" && cfg.pgUrl) {
       db = createDb(cfg.pgUrl, true)
     } else {

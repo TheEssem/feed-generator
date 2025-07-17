@@ -1,5 +1,4 @@
 import type { RedisClientType, RedisDefaultModules } from "redis"
-import { createDb } from "../db/new"
 import { createRedis } from '../db/redis'
 
 import type { Database, Statement } from "bun:sqlite"
@@ -28,7 +27,8 @@ const delQueue: {
 
 self.onmessage = async (event: MessageEvent) => {
   if (event.data.op === 0) {
-    db = createDb(event.data.sqliteLocation)
+    const { createDb } = await import("../db/new")
+    db = await createDb(event.data.sqliteLocation)
     insertPost = db.query(`INSERT INTO "post" ("uri", "cid", "pds", "pdsBase", "indexedAt") VALUES (?1, ?2, ?3, ?4, ?5) ON CONFLICT DO NOTHING;`)
     insertPosts = db.transaction(async posts => {
       for (const post of posts) {

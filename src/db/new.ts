@@ -1,6 +1,7 @@
-import { Database } from "bun:sqlite";
+import type { Database } from "bun:sqlite";
 
-export const createDb = (location: string): Database => {
+export const createDb = async (location: string): Promise<Database> => {
+  const { Database } = await import(process.versions.deno ? "jsr:@db/sqlite@0.11" : "bun:sqlite")
   const db = new Database(location, { create: true });
   db.exec("PRAGMA journal_mode = WAL;");
   db.exec("PRAGMA synchronous = NORMAL;");
