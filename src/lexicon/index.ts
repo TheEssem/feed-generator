@@ -2,147 +2,176 @@
  * GENERATED CODE - DO NOT MODIFY
  */
 import {
-  createServer as createXrpcServer,
+  type Auth,
+  type Options as XrpcOptions,
   Server as XrpcServer,
-  Options as XrpcOptions,
-  AuthVerifier,
-  StreamAuthVerifier,
+  type StreamConfigOrHandler,
+  type MethodConfigOrHandler,
+  createServer as createXrpcServer,
 } from '@atproto/xrpc-server'
-import { schemas } from './lexicons'
-import * as ComAtprotoAdminDeleteAccount from './types/com/atproto/admin/deleteAccount'
-import * as ComAtprotoAdminDisableAccountInvites from './types/com/atproto/admin/disableAccountInvites'
-import * as ComAtprotoAdminDisableInviteCodes from './types/com/atproto/admin/disableInviteCodes'
-import * as ComAtprotoAdminEnableAccountInvites from './types/com/atproto/admin/enableAccountInvites'
-import * as ComAtprotoAdminGetAccountInfo from './types/com/atproto/admin/getAccountInfo'
-import * as ComAtprotoAdminGetAccountInfos from './types/com/atproto/admin/getAccountInfos'
-import * as ComAtprotoAdminGetInviteCodes from './types/com/atproto/admin/getInviteCodes'
-import * as ComAtprotoAdminGetSubjectStatus from './types/com/atproto/admin/getSubjectStatus'
-import * as ComAtprotoAdminSearchAccounts from './types/com/atproto/admin/searchAccounts'
-import * as ComAtprotoAdminSendEmail from './types/com/atproto/admin/sendEmail'
-import * as ComAtprotoAdminUpdateAccountEmail from './types/com/atproto/admin/updateAccountEmail'
-import * as ComAtprotoAdminUpdateAccountHandle from './types/com/atproto/admin/updateAccountHandle'
-import * as ComAtprotoAdminUpdateAccountPassword from './types/com/atproto/admin/updateAccountPassword'
-import * as ComAtprotoAdminUpdateSubjectStatus from './types/com/atproto/admin/updateSubjectStatus'
-import * as ComAtprotoIdentityGetRecommendedDidCredentials from './types/com/atproto/identity/getRecommendedDidCredentials'
-import * as ComAtprotoIdentityRequestPlcOperationSignature from './types/com/atproto/identity/requestPlcOperationSignature'
-import * as ComAtprotoIdentityResolveHandle from './types/com/atproto/identity/resolveHandle'
-import * as ComAtprotoIdentitySignPlcOperation from './types/com/atproto/identity/signPlcOperation'
-import * as ComAtprotoIdentitySubmitPlcOperation from './types/com/atproto/identity/submitPlcOperation'
-import * as ComAtprotoIdentityUpdateHandle from './types/com/atproto/identity/updateHandle'
-import * as ComAtprotoLabelQueryLabels from './types/com/atproto/label/queryLabels'
-import * as ComAtprotoLabelSubscribeLabels from './types/com/atproto/label/subscribeLabels'
-import * as ComAtprotoModerationCreateReport from './types/com/atproto/moderation/createReport'
-import * as ComAtprotoRepoApplyWrites from './types/com/atproto/repo/applyWrites'
-import * as ComAtprotoRepoCreateRecord from './types/com/atproto/repo/createRecord'
-import * as ComAtprotoRepoDeleteRecord from './types/com/atproto/repo/deleteRecord'
-import * as ComAtprotoRepoDescribeRepo from './types/com/atproto/repo/describeRepo'
-import * as ComAtprotoRepoGetRecord from './types/com/atproto/repo/getRecord'
-import * as ComAtprotoRepoImportRepo from './types/com/atproto/repo/importRepo'
-import * as ComAtprotoRepoListMissingBlobs from './types/com/atproto/repo/listMissingBlobs'
-import * as ComAtprotoRepoListRecords from './types/com/atproto/repo/listRecords'
-import * as ComAtprotoRepoPutRecord from './types/com/atproto/repo/putRecord'
-import * as ComAtprotoRepoUploadBlob from './types/com/atproto/repo/uploadBlob'
-import * as ComAtprotoServerActivateAccount from './types/com/atproto/server/activateAccount'
-import * as ComAtprotoServerCheckAccountStatus from './types/com/atproto/server/checkAccountStatus'
-import * as ComAtprotoServerConfirmEmail from './types/com/atproto/server/confirmEmail'
-import * as ComAtprotoServerCreateAccount from './types/com/atproto/server/createAccount'
-import * as ComAtprotoServerCreateAppPassword from './types/com/atproto/server/createAppPassword'
-import * as ComAtprotoServerCreateInviteCode from './types/com/atproto/server/createInviteCode'
-import * as ComAtprotoServerCreateInviteCodes from './types/com/atproto/server/createInviteCodes'
-import * as ComAtprotoServerCreateSession from './types/com/atproto/server/createSession'
-import * as ComAtprotoServerDeactivateAccount from './types/com/atproto/server/deactivateAccount'
-import * as ComAtprotoServerDeleteAccount from './types/com/atproto/server/deleteAccount'
-import * as ComAtprotoServerDeleteSession from './types/com/atproto/server/deleteSession'
-import * as ComAtprotoServerDescribeServer from './types/com/atproto/server/describeServer'
-import * as ComAtprotoServerGetAccountInviteCodes from './types/com/atproto/server/getAccountInviteCodes'
-import * as ComAtprotoServerGetServiceAuth from './types/com/atproto/server/getServiceAuth'
-import * as ComAtprotoServerGetSession from './types/com/atproto/server/getSession'
-import * as ComAtprotoServerListAppPasswords from './types/com/atproto/server/listAppPasswords'
-import * as ComAtprotoServerRefreshSession from './types/com/atproto/server/refreshSession'
-import * as ComAtprotoServerRequestAccountDelete from './types/com/atproto/server/requestAccountDelete'
-import * as ComAtprotoServerRequestEmailConfirmation from './types/com/atproto/server/requestEmailConfirmation'
-import * as ComAtprotoServerRequestEmailUpdate from './types/com/atproto/server/requestEmailUpdate'
-import * as ComAtprotoServerRequestPasswordReset from './types/com/atproto/server/requestPasswordReset'
-import * as ComAtprotoServerReserveSigningKey from './types/com/atproto/server/reserveSigningKey'
-import * as ComAtprotoServerResetPassword from './types/com/atproto/server/resetPassword'
-import * as ComAtprotoServerRevokeAppPassword from './types/com/atproto/server/revokeAppPassword'
-import * as ComAtprotoServerUpdateEmail from './types/com/atproto/server/updateEmail'
-import * as ComAtprotoSyncGetBlob from './types/com/atproto/sync/getBlob'
-import * as ComAtprotoSyncGetBlocks from './types/com/atproto/sync/getBlocks'
-import * as ComAtprotoSyncGetCheckout from './types/com/atproto/sync/getCheckout'
-import * as ComAtprotoSyncGetHead from './types/com/atproto/sync/getHead'
-import * as ComAtprotoSyncGetLatestCommit from './types/com/atproto/sync/getLatestCommit'
-import * as ComAtprotoSyncGetRecord from './types/com/atproto/sync/getRecord'
-import * as ComAtprotoSyncGetRepo from './types/com/atproto/sync/getRepo'
-import * as ComAtprotoSyncGetRepoStatus from './types/com/atproto/sync/getRepoStatus'
-import * as ComAtprotoSyncListBlobs from './types/com/atproto/sync/listBlobs'
-import * as ComAtprotoSyncListRepos from './types/com/atproto/sync/listRepos'
-import * as ComAtprotoSyncNotifyOfUpdate from './types/com/atproto/sync/notifyOfUpdate'
-import * as ComAtprotoSyncRequestCrawl from './types/com/atproto/sync/requestCrawl'
-import * as ComAtprotoSyncSubscribeRepos from './types/com/atproto/sync/subscribeRepos'
-import * as ComAtprotoTempCheckSignupQueue from './types/com/atproto/temp/checkSignupQueue'
-import * as ComAtprotoTempFetchLabels from './types/com/atproto/temp/fetchLabels'
-import * as ComAtprotoTempRequestPhoneVerification from './types/com/atproto/temp/requestPhoneVerification'
-import * as AppBskyActorGetPreferences from './types/app/bsky/actor/getPreferences'
-import * as AppBskyActorGetProfile from './types/app/bsky/actor/getProfile'
-import * as AppBskyActorGetProfiles from './types/app/bsky/actor/getProfiles'
-import * as AppBskyActorGetSuggestions from './types/app/bsky/actor/getSuggestions'
-import * as AppBskyActorPutPreferences from './types/app/bsky/actor/putPreferences'
-import * as AppBskyActorSearchActors from './types/app/bsky/actor/searchActors'
-import * as AppBskyActorSearchActorsTypeahead from './types/app/bsky/actor/searchActorsTypeahead'
-import * as AppBskyFeedDescribeFeedGenerator from './types/app/bsky/feed/describeFeedGenerator'
-import * as AppBskyFeedGetActorFeeds from './types/app/bsky/feed/getActorFeeds'
-import * as AppBskyFeedGetActorLikes from './types/app/bsky/feed/getActorLikes'
-import * as AppBskyFeedGetAuthorFeed from './types/app/bsky/feed/getAuthorFeed'
-import * as AppBskyFeedGetFeedGenerator from './types/app/bsky/feed/getFeedGenerator'
-import * as AppBskyFeedGetFeedGenerators from './types/app/bsky/feed/getFeedGenerators'
-import * as AppBskyFeedGetFeed from './types/app/bsky/feed/getFeed'
-import * as AppBskyFeedGetFeedSkeleton from './types/app/bsky/feed/getFeedSkeleton'
-import * as AppBskyFeedGetLikes from './types/app/bsky/feed/getLikes'
-import * as AppBskyFeedGetListFeed from './types/app/bsky/feed/getListFeed'
-import * as AppBskyFeedGetPosts from './types/app/bsky/feed/getPosts'
-import * as AppBskyFeedGetPostThread from './types/app/bsky/feed/getPostThread'
-import * as AppBskyFeedGetQuotes from './types/app/bsky/feed/getQuotes'
-import * as AppBskyFeedGetRepostedBy from './types/app/bsky/feed/getRepostedBy'
-import * as AppBskyFeedGetSuggestedFeeds from './types/app/bsky/feed/getSuggestedFeeds'
-import * as AppBskyFeedGetTimeline from './types/app/bsky/feed/getTimeline'
-import * as AppBskyFeedSearchPosts from './types/app/bsky/feed/searchPosts'
-import * as AppBskyFeedSendInteractions from './types/app/bsky/feed/sendInteractions'
-import * as AppBskyGraphGetActorStarterPacks from './types/app/bsky/graph/getActorStarterPacks'
-import * as AppBskyGraphGetBlocks from './types/app/bsky/graph/getBlocks'
-import * as AppBskyGraphGetFollowers from './types/app/bsky/graph/getFollowers'
-import * as AppBskyGraphGetFollows from './types/app/bsky/graph/getFollows'
-import * as AppBskyGraphGetKnownFollowers from './types/app/bsky/graph/getKnownFollowers'
-import * as AppBskyGraphGetListBlocks from './types/app/bsky/graph/getListBlocks'
-import * as AppBskyGraphGetList from './types/app/bsky/graph/getList'
-import * as AppBskyGraphGetListMutes from './types/app/bsky/graph/getListMutes'
-import * as AppBskyGraphGetLists from './types/app/bsky/graph/getLists'
-import * as AppBskyGraphGetMutes from './types/app/bsky/graph/getMutes'
-import * as AppBskyGraphGetRelationships from './types/app/bsky/graph/getRelationships'
-import * as AppBskyGraphGetStarterPack from './types/app/bsky/graph/getStarterPack'
-import * as AppBskyGraphGetStarterPacks from './types/app/bsky/graph/getStarterPacks'
-import * as AppBskyGraphGetSuggestedFollowsByActor from './types/app/bsky/graph/getSuggestedFollowsByActor'
-import * as AppBskyGraphMuteActor from './types/app/bsky/graph/muteActor'
-import * as AppBskyGraphMuteActorList from './types/app/bsky/graph/muteActorList'
-import * as AppBskyGraphMuteThread from './types/app/bsky/graph/muteThread'
-import * as AppBskyGraphUnmuteActor from './types/app/bsky/graph/unmuteActor'
-import * as AppBskyGraphUnmuteActorList from './types/app/bsky/graph/unmuteActorList'
-import * as AppBskyGraphUnmuteThread from './types/app/bsky/graph/unmuteThread'
-import * as AppBskyLabelerGetServices from './types/app/bsky/labeler/getServices'
-import * as AppBskyNotificationGetUnreadCount from './types/app/bsky/notification/getUnreadCount'
-import * as AppBskyNotificationListNotifications from './types/app/bsky/notification/listNotifications'
-import * as AppBskyNotificationPutPreferences from './types/app/bsky/notification/putPreferences'
-import * as AppBskyNotificationRegisterPush from './types/app/bsky/notification/registerPush'
-import * as AppBskyNotificationUpdateSeen from './types/app/bsky/notification/updateSeen'
-import * as AppBskyUnspeccedGetConfig from './types/app/bsky/unspecced/getConfig'
-import * as AppBskyUnspeccedGetPopularFeedGenerators from './types/app/bsky/unspecced/getPopularFeedGenerators'
-import * as AppBskyUnspeccedGetSuggestionsSkeleton from './types/app/bsky/unspecced/getSuggestionsSkeleton'
-import * as AppBskyUnspeccedGetTaggedSuggestions from './types/app/bsky/unspecced/getTaggedSuggestions'
-import * as AppBskyUnspeccedSearchActorsSkeleton from './types/app/bsky/unspecced/searchActorsSkeleton'
-import * as AppBskyUnspeccedSearchPostsSkeleton from './types/app/bsky/unspecced/searchPostsSkeleton'
-import * as AppBskyVideoGetJobStatus from './types/app/bsky/video/getJobStatus'
-import * as AppBskyVideoGetUploadLimits from './types/app/bsky/video/getUploadLimits'
-import * as AppBskyVideoUploadVideo from './types/app/bsky/video/uploadVideo'
+import { schemas } from './lexicons.js'
+import * as ComAtprotoAdminDeleteAccount from './types/com/atproto/admin/deleteAccount.js'
+import * as ComAtprotoAdminDisableAccountInvites from './types/com/atproto/admin/disableAccountInvites.js'
+import * as ComAtprotoAdminDisableInviteCodes from './types/com/atproto/admin/disableInviteCodes.js'
+import * as ComAtprotoAdminEnableAccountInvites from './types/com/atproto/admin/enableAccountInvites.js'
+import * as ComAtprotoAdminGetAccountInfo from './types/com/atproto/admin/getAccountInfo.js'
+import * as ComAtprotoAdminGetAccountInfos from './types/com/atproto/admin/getAccountInfos.js'
+import * as ComAtprotoAdminGetInviteCodes from './types/com/atproto/admin/getInviteCodes.js'
+import * as ComAtprotoAdminGetSubjectStatus from './types/com/atproto/admin/getSubjectStatus.js'
+import * as ComAtprotoAdminSearchAccounts from './types/com/atproto/admin/searchAccounts.js'
+import * as ComAtprotoAdminSendEmail from './types/com/atproto/admin/sendEmail.js'
+import * as ComAtprotoAdminUpdateAccountEmail from './types/com/atproto/admin/updateAccountEmail.js'
+import * as ComAtprotoAdminUpdateAccountHandle from './types/com/atproto/admin/updateAccountHandle.js'
+import * as ComAtprotoAdminUpdateAccountPassword from './types/com/atproto/admin/updateAccountPassword.js'
+import * as ComAtprotoAdminUpdateAccountSigningKey from './types/com/atproto/admin/updateAccountSigningKey.js'
+import * as ComAtprotoAdminUpdateSubjectStatus from './types/com/atproto/admin/updateSubjectStatus.js'
+import * as ComAtprotoIdentityGetRecommendedDidCredentials from './types/com/atproto/identity/getRecommendedDidCredentials.js'
+import * as ComAtprotoIdentityRefreshIdentity from './types/com/atproto/identity/refreshIdentity.js'
+import * as ComAtprotoIdentityRequestPlcOperationSignature from './types/com/atproto/identity/requestPlcOperationSignature.js'
+import * as ComAtprotoIdentityResolveDid from './types/com/atproto/identity/resolveDid.js'
+import * as ComAtprotoIdentityResolveHandle from './types/com/atproto/identity/resolveHandle.js'
+import * as ComAtprotoIdentityResolveIdentity from './types/com/atproto/identity/resolveIdentity.js'
+import * as ComAtprotoIdentitySignPlcOperation from './types/com/atproto/identity/signPlcOperation.js'
+import * as ComAtprotoIdentitySubmitPlcOperation from './types/com/atproto/identity/submitPlcOperation.js'
+import * as ComAtprotoIdentityUpdateHandle from './types/com/atproto/identity/updateHandle.js'
+import * as ComAtprotoLabelQueryLabels from './types/com/atproto/label/queryLabels.js'
+import * as ComAtprotoLabelSubscribeLabels from './types/com/atproto/label/subscribeLabels.js'
+import * as ComAtprotoModerationCreateReport from './types/com/atproto/moderation/createReport.js'
+import * as ComAtprotoRepoApplyWrites from './types/com/atproto/repo/applyWrites.js'
+import * as ComAtprotoRepoCreateRecord from './types/com/atproto/repo/createRecord.js'
+import * as ComAtprotoRepoDeleteRecord from './types/com/atproto/repo/deleteRecord.js'
+import * as ComAtprotoRepoDescribeRepo from './types/com/atproto/repo/describeRepo.js'
+import * as ComAtprotoRepoGetRecord from './types/com/atproto/repo/getRecord.js'
+import * as ComAtprotoRepoImportRepo from './types/com/atproto/repo/importRepo.js'
+import * as ComAtprotoRepoListMissingBlobs from './types/com/atproto/repo/listMissingBlobs.js'
+import * as ComAtprotoRepoListRecords from './types/com/atproto/repo/listRecords.js'
+import * as ComAtprotoRepoPutRecord from './types/com/atproto/repo/putRecord.js'
+import * as ComAtprotoRepoUploadBlob from './types/com/atproto/repo/uploadBlob.js'
+import * as ComAtprotoServerActivateAccount from './types/com/atproto/server/activateAccount.js'
+import * as ComAtprotoServerCheckAccountStatus from './types/com/atproto/server/checkAccountStatus.js'
+import * as ComAtprotoServerConfirmEmail from './types/com/atproto/server/confirmEmail.js'
+import * as ComAtprotoServerCreateAccount from './types/com/atproto/server/createAccount.js'
+import * as ComAtprotoServerCreateAppPassword from './types/com/atproto/server/createAppPassword.js'
+import * as ComAtprotoServerCreateInviteCode from './types/com/atproto/server/createInviteCode.js'
+import * as ComAtprotoServerCreateInviteCodes from './types/com/atproto/server/createInviteCodes.js'
+import * as ComAtprotoServerCreateSession from './types/com/atproto/server/createSession.js'
+import * as ComAtprotoServerDeactivateAccount from './types/com/atproto/server/deactivateAccount.js'
+import * as ComAtprotoServerDeleteAccount from './types/com/atproto/server/deleteAccount.js'
+import * as ComAtprotoServerDeleteSession from './types/com/atproto/server/deleteSession.js'
+import * as ComAtprotoServerDescribeServer from './types/com/atproto/server/describeServer.js'
+import * as ComAtprotoServerGetAccountInviteCodes from './types/com/atproto/server/getAccountInviteCodes.js'
+import * as ComAtprotoServerGetServiceAuth from './types/com/atproto/server/getServiceAuth.js'
+import * as ComAtprotoServerGetSession from './types/com/atproto/server/getSession.js'
+import * as ComAtprotoServerListAppPasswords from './types/com/atproto/server/listAppPasswords.js'
+import * as ComAtprotoServerRefreshSession from './types/com/atproto/server/refreshSession.js'
+import * as ComAtprotoServerRequestAccountDelete from './types/com/atproto/server/requestAccountDelete.js'
+import * as ComAtprotoServerRequestEmailConfirmation from './types/com/atproto/server/requestEmailConfirmation.js'
+import * as ComAtprotoServerRequestEmailUpdate from './types/com/atproto/server/requestEmailUpdate.js'
+import * as ComAtprotoServerRequestPasswordReset from './types/com/atproto/server/requestPasswordReset.js'
+import * as ComAtprotoServerReserveSigningKey from './types/com/atproto/server/reserveSigningKey.js'
+import * as ComAtprotoServerResetPassword from './types/com/atproto/server/resetPassword.js'
+import * as ComAtprotoServerRevokeAppPassword from './types/com/atproto/server/revokeAppPassword.js'
+import * as ComAtprotoServerUpdateEmail from './types/com/atproto/server/updateEmail.js'
+import * as ComAtprotoSyncGetBlob from './types/com/atproto/sync/getBlob.js'
+import * as ComAtprotoSyncGetBlocks from './types/com/atproto/sync/getBlocks.js'
+import * as ComAtprotoSyncGetCheckout from './types/com/atproto/sync/getCheckout.js'
+import * as ComAtprotoSyncGetHead from './types/com/atproto/sync/getHead.js'
+import * as ComAtprotoSyncGetHostStatus from './types/com/atproto/sync/getHostStatus.js'
+import * as ComAtprotoSyncGetLatestCommit from './types/com/atproto/sync/getLatestCommit.js'
+import * as ComAtprotoSyncGetRecord from './types/com/atproto/sync/getRecord.js'
+import * as ComAtprotoSyncGetRepo from './types/com/atproto/sync/getRepo.js'
+import * as ComAtprotoSyncGetRepoStatus from './types/com/atproto/sync/getRepoStatus.js'
+import * as ComAtprotoSyncListBlobs from './types/com/atproto/sync/listBlobs.js'
+import * as ComAtprotoSyncListHosts from './types/com/atproto/sync/listHosts.js'
+import * as ComAtprotoSyncListReposByCollection from './types/com/atproto/sync/listReposByCollection.js'
+import * as ComAtprotoSyncListRepos from './types/com/atproto/sync/listRepos.js'
+import * as ComAtprotoSyncNotifyOfUpdate from './types/com/atproto/sync/notifyOfUpdate.js'
+import * as ComAtprotoSyncRequestCrawl from './types/com/atproto/sync/requestCrawl.js'
+import * as ComAtprotoSyncSubscribeRepos from './types/com/atproto/sync/subscribeRepos.js'
+import * as ComAtprotoTempAddReservedHandle from './types/com/atproto/temp/addReservedHandle.js'
+import * as ComAtprotoTempCheckSignupQueue from './types/com/atproto/temp/checkSignupQueue.js'
+import * as ComAtprotoTempFetchLabels from './types/com/atproto/temp/fetchLabels.js'
+import * as ComAtprotoTempRequestPhoneVerification from './types/com/atproto/temp/requestPhoneVerification.js'
+import * as AppBskyActorGetPreferences from './types/app/bsky/actor/getPreferences.js'
+import * as AppBskyActorGetProfile from './types/app/bsky/actor/getProfile.js'
+import * as AppBskyActorGetProfiles from './types/app/bsky/actor/getProfiles.js'
+import * as AppBskyActorGetSuggestions from './types/app/bsky/actor/getSuggestions.js'
+import * as AppBskyActorPutPreferences from './types/app/bsky/actor/putPreferences.js'
+import * as AppBskyActorSearchActors from './types/app/bsky/actor/searchActors.js'
+import * as AppBskyActorSearchActorsTypeahead from './types/app/bsky/actor/searchActorsTypeahead.js'
+import * as AppBskyFeedDescribeFeedGenerator from './types/app/bsky/feed/describeFeedGenerator.js'
+import * as AppBskyFeedGetActorFeeds from './types/app/bsky/feed/getActorFeeds.js'
+import * as AppBskyFeedGetActorLikes from './types/app/bsky/feed/getActorLikes.js'
+import * as AppBskyFeedGetAuthorFeed from './types/app/bsky/feed/getAuthorFeed.js'
+import * as AppBskyFeedGetFeedGenerator from './types/app/bsky/feed/getFeedGenerator.js'
+import * as AppBskyFeedGetFeedGenerators from './types/app/bsky/feed/getFeedGenerators.js'
+import * as AppBskyFeedGetFeed from './types/app/bsky/feed/getFeed.js'
+import * as AppBskyFeedGetFeedSkeleton from './types/app/bsky/feed/getFeedSkeleton.js'
+import * as AppBskyFeedGetLikes from './types/app/bsky/feed/getLikes.js'
+import * as AppBskyFeedGetListFeed from './types/app/bsky/feed/getListFeed.js'
+import * as AppBskyFeedGetPosts from './types/app/bsky/feed/getPosts.js'
+import * as AppBskyFeedGetPostThread from './types/app/bsky/feed/getPostThread.js'
+import * as AppBskyFeedGetQuotes from './types/app/bsky/feed/getQuotes.js'
+import * as AppBskyFeedGetRepostedBy from './types/app/bsky/feed/getRepostedBy.js'
+import * as AppBskyFeedGetSuggestedFeeds from './types/app/bsky/feed/getSuggestedFeeds.js'
+import * as AppBskyFeedGetTimeline from './types/app/bsky/feed/getTimeline.js'
+import * as AppBskyFeedSearchPosts from './types/app/bsky/feed/searchPosts.js'
+import * as AppBskyFeedSendInteractions from './types/app/bsky/feed/sendInteractions.js'
+import * as AppBskyGraphGetActorStarterPacks from './types/app/bsky/graph/getActorStarterPacks.js'
+import * as AppBskyGraphGetBlocks from './types/app/bsky/graph/getBlocks.js'
+import * as AppBskyGraphGetFollowers from './types/app/bsky/graph/getFollowers.js'
+import * as AppBskyGraphGetFollows from './types/app/bsky/graph/getFollows.js'
+import * as AppBskyGraphGetKnownFollowers from './types/app/bsky/graph/getKnownFollowers.js'
+import * as AppBskyGraphGetListBlocks from './types/app/bsky/graph/getListBlocks.js'
+import * as AppBskyGraphGetList from './types/app/bsky/graph/getList.js'
+import * as AppBskyGraphGetListMutes from './types/app/bsky/graph/getListMutes.js'
+import * as AppBskyGraphGetLists from './types/app/bsky/graph/getLists.js'
+import * as AppBskyGraphGetMutes from './types/app/bsky/graph/getMutes.js'
+import * as AppBskyGraphGetRelationships from './types/app/bsky/graph/getRelationships.js'
+import * as AppBskyGraphGetStarterPack from './types/app/bsky/graph/getStarterPack.js'
+import * as AppBskyGraphGetStarterPacks from './types/app/bsky/graph/getStarterPacks.js'
+import * as AppBskyGraphGetSuggestedFollowsByActor from './types/app/bsky/graph/getSuggestedFollowsByActor.js'
+import * as AppBskyGraphMuteActor from './types/app/bsky/graph/muteActor.js'
+import * as AppBskyGraphMuteActorList from './types/app/bsky/graph/muteActorList.js'
+import * as AppBskyGraphMuteThread from './types/app/bsky/graph/muteThread.js'
+import * as AppBskyGraphSearchStarterPacks from './types/app/bsky/graph/searchStarterPacks.js'
+import * as AppBskyGraphUnmuteActor from './types/app/bsky/graph/unmuteActor.js'
+import * as AppBskyGraphUnmuteActorList from './types/app/bsky/graph/unmuteActorList.js'
+import * as AppBskyGraphUnmuteThread from './types/app/bsky/graph/unmuteThread.js'
+import * as AppBskyLabelerGetServices from './types/app/bsky/labeler/getServices.js'
+import * as AppBskyNotificationGetPreferences from './types/app/bsky/notification/getPreferences.js'
+import * as AppBskyNotificationGetUnreadCount from './types/app/bsky/notification/getUnreadCount.js'
+import * as AppBskyNotificationListActivitySubscriptions from './types/app/bsky/notification/listActivitySubscriptions.js'
+import * as AppBskyNotificationListNotifications from './types/app/bsky/notification/listNotifications.js'
+import * as AppBskyNotificationPutActivitySubscription from './types/app/bsky/notification/putActivitySubscription.js'
+import * as AppBskyNotificationPutPreferences from './types/app/bsky/notification/putPreferences.js'
+import * as AppBskyNotificationPutPreferencesV2 from './types/app/bsky/notification/putPreferencesV2.js'
+import * as AppBskyNotificationRegisterPush from './types/app/bsky/notification/registerPush.js'
+import * as AppBskyNotificationUnregisterPush from './types/app/bsky/notification/unregisterPush.js'
+import * as AppBskyNotificationUpdateSeen from './types/app/bsky/notification/updateSeen.js'
+import * as AppBskyUnspeccedGetAgeAssuranceState from './types/app/bsky/unspecced/getAgeAssuranceState.js'
+import * as AppBskyUnspeccedGetConfig from './types/app/bsky/unspecced/getConfig.js'
+import * as AppBskyUnspeccedGetPopularFeedGenerators from './types/app/bsky/unspecced/getPopularFeedGenerators.js'
+import * as AppBskyUnspeccedGetPostThreadOtherV2 from './types/app/bsky/unspecced/getPostThreadOtherV2.js'
+import * as AppBskyUnspeccedGetPostThreadV2 from './types/app/bsky/unspecced/getPostThreadV2.js'
+import * as AppBskyUnspeccedGetSuggestedFeeds from './types/app/bsky/unspecced/getSuggestedFeeds.js'
+import * as AppBskyUnspeccedGetSuggestedFeedsSkeleton from './types/app/bsky/unspecced/getSuggestedFeedsSkeleton.js'
+import * as AppBskyUnspeccedGetSuggestedStarterPacks from './types/app/bsky/unspecced/getSuggestedStarterPacks.js'
+import * as AppBskyUnspeccedGetSuggestedStarterPacksSkeleton from './types/app/bsky/unspecced/getSuggestedStarterPacksSkeleton.js'
+import * as AppBskyUnspeccedGetSuggestedUsers from './types/app/bsky/unspecced/getSuggestedUsers.js'
+import * as AppBskyUnspeccedGetSuggestedUsersSkeleton from './types/app/bsky/unspecced/getSuggestedUsersSkeleton.js'
+import * as AppBskyUnspeccedGetSuggestionsSkeleton from './types/app/bsky/unspecced/getSuggestionsSkeleton.js'
+import * as AppBskyUnspeccedGetTaggedSuggestions from './types/app/bsky/unspecced/getTaggedSuggestions.js'
+import * as AppBskyUnspeccedGetTrendingTopics from './types/app/bsky/unspecced/getTrendingTopics.js'
+import * as AppBskyUnspeccedGetTrends from './types/app/bsky/unspecced/getTrends.js'
+import * as AppBskyUnspeccedGetTrendsSkeleton from './types/app/bsky/unspecced/getTrendsSkeleton.js'
+import * as AppBskyUnspeccedInitAgeAssurance from './types/app/bsky/unspecced/initAgeAssurance.js'
+import * as AppBskyUnspeccedSearchActorsSkeleton from './types/app/bsky/unspecced/searchActorsSkeleton.js'
+import * as AppBskyUnspeccedSearchPostsSkeleton from './types/app/bsky/unspecced/searchPostsSkeleton.js'
+import * as AppBskyUnspeccedSearchStarterPacksSkeleton from './types/app/bsky/unspecced/searchStarterPacksSkeleton.js'
+import * as AppBskyVideoGetJobStatus from './types/app/bsky/video/getJobStatus.js'
+import * as AppBskyVideoGetUploadLimits from './types/app/bsky/video/getUploadLimits.js'
+import * as AppBskyVideoUploadVideo from './types/app/bsky/video/uploadVideo.js'
 
 export const COM_ATPROTO_MODERATION = {
   DefsReasonSpam: 'com.atproto.moderation.defs#reasonSpam',
@@ -153,6 +182,9 @@ export const COM_ATPROTO_MODERATION = {
   DefsReasonOther: 'com.atproto.moderation.defs#reasonOther',
   DefsReasonAppeal: 'com.atproto.moderation.defs#reasonAppeal',
 }
+export const APP_BSKY_ACTOR = {
+  StatusLive: 'app.bsky.actor.status#live',
+}
 export const APP_BSKY_FEED = {
   DefsRequestLess: 'app.bsky.feed.defs#requestLess',
   DefsRequestMore: 'app.bsky.feed.defs#requestMore',
@@ -160,6 +192,8 @@ export const APP_BSKY_FEED = {
   DefsClickthroughAuthor: 'app.bsky.feed.defs#clickthroughAuthor',
   DefsClickthroughReposter: 'app.bsky.feed.defs#clickthroughReposter',
   DefsClickthroughEmbed: 'app.bsky.feed.defs#clickthroughEmbed',
+  DefsContentModeUnspecified: 'app.bsky.feed.defs#contentModeUnspecified',
+  DefsContentModeVideo: 'app.bsky.feed.defs#contentModeVideo',
   DefsInteractionSeen: 'app.bsky.feed.defs#interactionSeen',
   DefsInteractionLike: 'app.bsky.feed.defs#interactionLike',
   DefsInteractionRepost: 'app.bsky.feed.defs#interactionRepost',
@@ -204,6 +238,7 @@ export class ComAtprotoNS {
   admin: ComAtprotoAdminNS
   identity: ComAtprotoIdentityNS
   label: ComAtprotoLabelNS
+  lexicon: ComAtprotoLexiconNS
   moderation: ComAtprotoModerationNS
   repo: ComAtprotoRepoNS
   server: ComAtprotoServerNS
@@ -215,6 +250,7 @@ export class ComAtprotoNS {
     this.admin = new ComAtprotoAdminNS(server)
     this.identity = new ComAtprotoIdentityNS(server)
     this.label = new ComAtprotoLabelNS(server)
+    this.lexicon = new ComAtprotoLexiconNS(server)
     this.moderation = new ComAtprotoModerationNS(server)
     this.repo = new ComAtprotoRepoNS(server)
     this.server = new ComAtprotoServerNS(server)
@@ -230,154 +266,180 @@ export class ComAtprotoAdminNS {
     this._server = server
   }
 
-  deleteAccount<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoAdminDeleteAccount.Handler<ExtractAuth<AV>>,
-      ComAtprotoAdminDeleteAccount.HandlerReqCtx<ExtractAuth<AV>>
+  deleteAccount<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoAdminDeleteAccount.QueryParams,
+      ComAtprotoAdminDeleteAccount.HandlerInput,
+      ComAtprotoAdminDeleteAccount.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.admin.deleteAccount' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  disableAccountInvites<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoAdminDisableAccountInvites.Handler<ExtractAuth<AV>>,
-      ComAtprotoAdminDisableAccountInvites.HandlerReqCtx<ExtractAuth<AV>>
+  disableAccountInvites<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoAdminDisableAccountInvites.QueryParams,
+      ComAtprotoAdminDisableAccountInvites.HandlerInput,
+      ComAtprotoAdminDisableAccountInvites.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.admin.disableAccountInvites' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  disableInviteCodes<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoAdminDisableInviteCodes.Handler<ExtractAuth<AV>>,
-      ComAtprotoAdminDisableInviteCodes.HandlerReqCtx<ExtractAuth<AV>>
+  disableInviteCodes<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoAdminDisableInviteCodes.QueryParams,
+      ComAtprotoAdminDisableInviteCodes.HandlerInput,
+      ComAtprotoAdminDisableInviteCodes.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.admin.disableInviteCodes' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  enableAccountInvites<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoAdminEnableAccountInvites.Handler<ExtractAuth<AV>>,
-      ComAtprotoAdminEnableAccountInvites.HandlerReqCtx<ExtractAuth<AV>>
+  enableAccountInvites<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoAdminEnableAccountInvites.QueryParams,
+      ComAtprotoAdminEnableAccountInvites.HandlerInput,
+      ComAtprotoAdminEnableAccountInvites.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.admin.enableAccountInvites' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getAccountInfo<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoAdminGetAccountInfo.Handler<ExtractAuth<AV>>,
-      ComAtprotoAdminGetAccountInfo.HandlerReqCtx<ExtractAuth<AV>>
+  getAccountInfo<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoAdminGetAccountInfo.QueryParams,
+      ComAtprotoAdminGetAccountInfo.HandlerInput,
+      ComAtprotoAdminGetAccountInfo.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.admin.getAccountInfo' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getAccountInfos<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoAdminGetAccountInfos.Handler<ExtractAuth<AV>>,
-      ComAtprotoAdminGetAccountInfos.HandlerReqCtx<ExtractAuth<AV>>
+  getAccountInfos<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoAdminGetAccountInfos.QueryParams,
+      ComAtprotoAdminGetAccountInfos.HandlerInput,
+      ComAtprotoAdminGetAccountInfos.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.admin.getAccountInfos' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getInviteCodes<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoAdminGetInviteCodes.Handler<ExtractAuth<AV>>,
-      ComAtprotoAdminGetInviteCodes.HandlerReqCtx<ExtractAuth<AV>>
+  getInviteCodes<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoAdminGetInviteCodes.QueryParams,
+      ComAtprotoAdminGetInviteCodes.HandlerInput,
+      ComAtprotoAdminGetInviteCodes.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.admin.getInviteCodes' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getSubjectStatus<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoAdminGetSubjectStatus.Handler<ExtractAuth<AV>>,
-      ComAtprotoAdminGetSubjectStatus.HandlerReqCtx<ExtractAuth<AV>>
+  getSubjectStatus<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoAdminGetSubjectStatus.QueryParams,
+      ComAtprotoAdminGetSubjectStatus.HandlerInput,
+      ComAtprotoAdminGetSubjectStatus.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.admin.getSubjectStatus' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  searchAccounts<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoAdminSearchAccounts.Handler<ExtractAuth<AV>>,
-      ComAtprotoAdminSearchAccounts.HandlerReqCtx<ExtractAuth<AV>>
+  searchAccounts<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoAdminSearchAccounts.QueryParams,
+      ComAtprotoAdminSearchAccounts.HandlerInput,
+      ComAtprotoAdminSearchAccounts.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.admin.searchAccounts' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  sendEmail<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoAdminSendEmail.Handler<ExtractAuth<AV>>,
-      ComAtprotoAdminSendEmail.HandlerReqCtx<ExtractAuth<AV>>
+  sendEmail<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoAdminSendEmail.QueryParams,
+      ComAtprotoAdminSendEmail.HandlerInput,
+      ComAtprotoAdminSendEmail.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.admin.sendEmail' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  updateAccountEmail<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoAdminUpdateAccountEmail.Handler<ExtractAuth<AV>>,
-      ComAtprotoAdminUpdateAccountEmail.HandlerReqCtx<ExtractAuth<AV>>
+  updateAccountEmail<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoAdminUpdateAccountEmail.QueryParams,
+      ComAtprotoAdminUpdateAccountEmail.HandlerInput,
+      ComAtprotoAdminUpdateAccountEmail.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.admin.updateAccountEmail' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  updateAccountHandle<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoAdminUpdateAccountHandle.Handler<ExtractAuth<AV>>,
-      ComAtprotoAdminUpdateAccountHandle.HandlerReqCtx<ExtractAuth<AV>>
+  updateAccountHandle<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoAdminUpdateAccountHandle.QueryParams,
+      ComAtprotoAdminUpdateAccountHandle.HandlerInput,
+      ComAtprotoAdminUpdateAccountHandle.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.admin.updateAccountHandle' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  updateAccountPassword<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoAdminUpdateAccountPassword.Handler<ExtractAuth<AV>>,
-      ComAtprotoAdminUpdateAccountPassword.HandlerReqCtx<ExtractAuth<AV>>
+  updateAccountPassword<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoAdminUpdateAccountPassword.QueryParams,
+      ComAtprotoAdminUpdateAccountPassword.HandlerInput,
+      ComAtprotoAdminUpdateAccountPassword.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.admin.updateAccountPassword' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  updateSubjectStatus<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoAdminUpdateSubjectStatus.Handler<ExtractAuth<AV>>,
-      ComAtprotoAdminUpdateSubjectStatus.HandlerReqCtx<ExtractAuth<AV>>
+  updateAccountSigningKey<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoAdminUpdateAccountSigningKey.QueryParams,
+      ComAtprotoAdminUpdateAccountSigningKey.HandlerInput,
+      ComAtprotoAdminUpdateAccountSigningKey.HandlerOutput
+    >,
+  ) {
+    const nsid = 'com.atproto.admin.updateAccountSigningKey' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  updateSubjectStatus<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoAdminUpdateSubjectStatus.QueryParams,
+      ComAtprotoAdminUpdateSubjectStatus.HandlerInput,
+      ComAtprotoAdminUpdateSubjectStatus.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.admin.updateSubjectStatus' // @ts-ignore
@@ -392,70 +454,108 @@ export class ComAtprotoIdentityNS {
     this._server = server
   }
 
-  getRecommendedDidCredentials<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoIdentityGetRecommendedDidCredentials.Handler<ExtractAuth<AV>>,
-      ComAtprotoIdentityGetRecommendedDidCredentials.HandlerReqCtx<
-        ExtractAuth<AV>
-      >
+  getRecommendedDidCredentials<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoIdentityGetRecommendedDidCredentials.QueryParams,
+      ComAtprotoIdentityGetRecommendedDidCredentials.HandlerInput,
+      ComAtprotoIdentityGetRecommendedDidCredentials.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.identity.getRecommendedDidCredentials' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  requestPlcOperationSignature<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoIdentityRequestPlcOperationSignature.Handler<ExtractAuth<AV>>,
-      ComAtprotoIdentityRequestPlcOperationSignature.HandlerReqCtx<
-        ExtractAuth<AV>
-      >
+  refreshIdentity<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoIdentityRefreshIdentity.QueryParams,
+      ComAtprotoIdentityRefreshIdentity.HandlerInput,
+      ComAtprotoIdentityRefreshIdentity.HandlerOutput
+    >,
+  ) {
+    const nsid = 'com.atproto.identity.refreshIdentity' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  requestPlcOperationSignature<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoIdentityRequestPlcOperationSignature.QueryParams,
+      ComAtprotoIdentityRequestPlcOperationSignature.HandlerInput,
+      ComAtprotoIdentityRequestPlcOperationSignature.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.identity.requestPlcOperationSignature' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  resolveHandle<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoIdentityResolveHandle.Handler<ExtractAuth<AV>>,
-      ComAtprotoIdentityResolveHandle.HandlerReqCtx<ExtractAuth<AV>>
+  resolveDid<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoIdentityResolveDid.QueryParams,
+      ComAtprotoIdentityResolveDid.HandlerInput,
+      ComAtprotoIdentityResolveDid.HandlerOutput
+    >,
+  ) {
+    const nsid = 'com.atproto.identity.resolveDid' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  resolveHandle<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoIdentityResolveHandle.QueryParams,
+      ComAtprotoIdentityResolveHandle.HandlerInput,
+      ComAtprotoIdentityResolveHandle.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.identity.resolveHandle' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  signPlcOperation<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoIdentitySignPlcOperation.Handler<ExtractAuth<AV>>,
-      ComAtprotoIdentitySignPlcOperation.HandlerReqCtx<ExtractAuth<AV>>
+  resolveIdentity<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoIdentityResolveIdentity.QueryParams,
+      ComAtprotoIdentityResolveIdentity.HandlerInput,
+      ComAtprotoIdentityResolveIdentity.HandlerOutput
+    >,
+  ) {
+    const nsid = 'com.atproto.identity.resolveIdentity' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  signPlcOperation<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoIdentitySignPlcOperation.QueryParams,
+      ComAtprotoIdentitySignPlcOperation.HandlerInput,
+      ComAtprotoIdentitySignPlcOperation.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.identity.signPlcOperation' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  submitPlcOperation<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoIdentitySubmitPlcOperation.Handler<ExtractAuth<AV>>,
-      ComAtprotoIdentitySubmitPlcOperation.HandlerReqCtx<ExtractAuth<AV>>
+  submitPlcOperation<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoIdentitySubmitPlcOperation.QueryParams,
+      ComAtprotoIdentitySubmitPlcOperation.HandlerInput,
+      ComAtprotoIdentitySubmitPlcOperation.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.identity.submitPlcOperation' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  updateHandle<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoIdentityUpdateHandle.Handler<ExtractAuth<AV>>,
-      ComAtprotoIdentityUpdateHandle.HandlerReqCtx<ExtractAuth<AV>>
+  updateHandle<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoIdentityUpdateHandle.QueryParams,
+      ComAtprotoIdentityUpdateHandle.HandlerInput,
+      ComAtprotoIdentityUpdateHandle.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.identity.updateHandle' // @ts-ignore
@@ -470,26 +570,35 @@ export class ComAtprotoLabelNS {
     this._server = server
   }
 
-  queryLabels<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoLabelQueryLabels.Handler<ExtractAuth<AV>>,
-      ComAtprotoLabelQueryLabels.HandlerReqCtx<ExtractAuth<AV>>
+  queryLabels<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoLabelQueryLabels.QueryParams,
+      ComAtprotoLabelQueryLabels.HandlerInput,
+      ComAtprotoLabelQueryLabels.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.label.queryLabels' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  subscribeLabels<AV extends StreamAuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoLabelSubscribeLabels.Handler<ExtractAuth<AV>>,
-      ComAtprotoLabelSubscribeLabels.HandlerReqCtx<ExtractAuth<AV>>
+  subscribeLabels<A extends Auth = void>(
+    cfg: StreamConfigOrHandler<
+      A,
+      ComAtprotoLabelSubscribeLabels.QueryParams,
+      ComAtprotoLabelSubscribeLabels.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.label.subscribeLabels' // @ts-ignore
     return this._server.xrpc.streamMethod(nsid, cfg)
+  }
+}
+
+export class ComAtprotoLexiconNS {
+  _server: Server
+
+  constructor(server: Server) {
+    this._server = server
   }
 }
 
@@ -500,11 +609,12 @@ export class ComAtprotoModerationNS {
     this._server = server
   }
 
-  createReport<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoModerationCreateReport.Handler<ExtractAuth<AV>>,
-      ComAtprotoModerationCreateReport.HandlerReqCtx<ExtractAuth<AV>>
+  createReport<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoModerationCreateReport.QueryParams,
+      ComAtprotoModerationCreateReport.HandlerInput,
+      ComAtprotoModerationCreateReport.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.moderation.createReport' // @ts-ignore
@@ -519,110 +629,120 @@ export class ComAtprotoRepoNS {
     this._server = server
   }
 
-  applyWrites<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoRepoApplyWrites.Handler<ExtractAuth<AV>>,
-      ComAtprotoRepoApplyWrites.HandlerReqCtx<ExtractAuth<AV>>
+  applyWrites<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoRepoApplyWrites.QueryParams,
+      ComAtprotoRepoApplyWrites.HandlerInput,
+      ComAtprotoRepoApplyWrites.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.repo.applyWrites' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  createRecord<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoRepoCreateRecord.Handler<ExtractAuth<AV>>,
-      ComAtprotoRepoCreateRecord.HandlerReqCtx<ExtractAuth<AV>>
+  createRecord<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoRepoCreateRecord.QueryParams,
+      ComAtprotoRepoCreateRecord.HandlerInput,
+      ComAtprotoRepoCreateRecord.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.repo.createRecord' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  deleteRecord<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoRepoDeleteRecord.Handler<ExtractAuth<AV>>,
-      ComAtprotoRepoDeleteRecord.HandlerReqCtx<ExtractAuth<AV>>
+  deleteRecord<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoRepoDeleteRecord.QueryParams,
+      ComAtprotoRepoDeleteRecord.HandlerInput,
+      ComAtprotoRepoDeleteRecord.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.repo.deleteRecord' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  describeRepo<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoRepoDescribeRepo.Handler<ExtractAuth<AV>>,
-      ComAtprotoRepoDescribeRepo.HandlerReqCtx<ExtractAuth<AV>>
+  describeRepo<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoRepoDescribeRepo.QueryParams,
+      ComAtprotoRepoDescribeRepo.HandlerInput,
+      ComAtprotoRepoDescribeRepo.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.repo.describeRepo' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getRecord<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoRepoGetRecord.Handler<ExtractAuth<AV>>,
-      ComAtprotoRepoGetRecord.HandlerReqCtx<ExtractAuth<AV>>
+  getRecord<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoRepoGetRecord.QueryParams,
+      ComAtprotoRepoGetRecord.HandlerInput,
+      ComAtprotoRepoGetRecord.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.repo.getRecord' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  importRepo<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoRepoImportRepo.Handler<ExtractAuth<AV>>,
-      ComAtprotoRepoImportRepo.HandlerReqCtx<ExtractAuth<AV>>
+  importRepo<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoRepoImportRepo.QueryParams,
+      ComAtprotoRepoImportRepo.HandlerInput,
+      ComAtprotoRepoImportRepo.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.repo.importRepo' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  listMissingBlobs<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoRepoListMissingBlobs.Handler<ExtractAuth<AV>>,
-      ComAtprotoRepoListMissingBlobs.HandlerReqCtx<ExtractAuth<AV>>
+  listMissingBlobs<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoRepoListMissingBlobs.QueryParams,
+      ComAtprotoRepoListMissingBlobs.HandlerInput,
+      ComAtprotoRepoListMissingBlobs.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.repo.listMissingBlobs' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  listRecords<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoRepoListRecords.Handler<ExtractAuth<AV>>,
-      ComAtprotoRepoListRecords.HandlerReqCtx<ExtractAuth<AV>>
+  listRecords<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoRepoListRecords.QueryParams,
+      ComAtprotoRepoListRecords.HandlerInput,
+      ComAtprotoRepoListRecords.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.repo.listRecords' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  putRecord<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoRepoPutRecord.Handler<ExtractAuth<AV>>,
-      ComAtprotoRepoPutRecord.HandlerReqCtx<ExtractAuth<AV>>
+  putRecord<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoRepoPutRecord.QueryParams,
+      ComAtprotoRepoPutRecord.HandlerInput,
+      ComAtprotoRepoPutRecord.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.repo.putRecord' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  uploadBlob<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoRepoUploadBlob.Handler<ExtractAuth<AV>>,
-      ComAtprotoRepoUploadBlob.HandlerReqCtx<ExtractAuth<AV>>
+  uploadBlob<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoRepoUploadBlob.QueryParams,
+      ComAtprotoRepoUploadBlob.HandlerInput,
+      ComAtprotoRepoUploadBlob.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.repo.uploadBlob' // @ts-ignore
@@ -637,275 +757,300 @@ export class ComAtprotoServerNS {
     this._server = server
   }
 
-  activateAccount<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerActivateAccount.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerActivateAccount.HandlerReqCtx<ExtractAuth<AV>>
+  activateAccount<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerActivateAccount.QueryParams,
+      ComAtprotoServerActivateAccount.HandlerInput,
+      ComAtprotoServerActivateAccount.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.activateAccount' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  checkAccountStatus<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerCheckAccountStatus.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerCheckAccountStatus.HandlerReqCtx<ExtractAuth<AV>>
+  checkAccountStatus<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerCheckAccountStatus.QueryParams,
+      ComAtprotoServerCheckAccountStatus.HandlerInput,
+      ComAtprotoServerCheckAccountStatus.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.checkAccountStatus' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  confirmEmail<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerConfirmEmail.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerConfirmEmail.HandlerReqCtx<ExtractAuth<AV>>
+  confirmEmail<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerConfirmEmail.QueryParams,
+      ComAtprotoServerConfirmEmail.HandlerInput,
+      ComAtprotoServerConfirmEmail.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.confirmEmail' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  createAccount<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerCreateAccount.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerCreateAccount.HandlerReqCtx<ExtractAuth<AV>>
+  createAccount<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerCreateAccount.QueryParams,
+      ComAtprotoServerCreateAccount.HandlerInput,
+      ComAtprotoServerCreateAccount.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.createAccount' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  createAppPassword<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerCreateAppPassword.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerCreateAppPassword.HandlerReqCtx<ExtractAuth<AV>>
+  createAppPassword<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerCreateAppPassword.QueryParams,
+      ComAtprotoServerCreateAppPassword.HandlerInput,
+      ComAtprotoServerCreateAppPassword.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.createAppPassword' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  createInviteCode<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerCreateInviteCode.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerCreateInviteCode.HandlerReqCtx<ExtractAuth<AV>>
+  createInviteCode<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerCreateInviteCode.QueryParams,
+      ComAtprotoServerCreateInviteCode.HandlerInput,
+      ComAtprotoServerCreateInviteCode.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.createInviteCode' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  createInviteCodes<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerCreateInviteCodes.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerCreateInviteCodes.HandlerReqCtx<ExtractAuth<AV>>
+  createInviteCodes<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerCreateInviteCodes.QueryParams,
+      ComAtprotoServerCreateInviteCodes.HandlerInput,
+      ComAtprotoServerCreateInviteCodes.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.createInviteCodes' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  createSession<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerCreateSession.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerCreateSession.HandlerReqCtx<ExtractAuth<AV>>
+  createSession<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerCreateSession.QueryParams,
+      ComAtprotoServerCreateSession.HandlerInput,
+      ComAtprotoServerCreateSession.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.createSession' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  deactivateAccount<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerDeactivateAccount.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerDeactivateAccount.HandlerReqCtx<ExtractAuth<AV>>
+  deactivateAccount<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerDeactivateAccount.QueryParams,
+      ComAtprotoServerDeactivateAccount.HandlerInput,
+      ComAtprotoServerDeactivateAccount.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.deactivateAccount' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  deleteAccount<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerDeleteAccount.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerDeleteAccount.HandlerReqCtx<ExtractAuth<AV>>
+  deleteAccount<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerDeleteAccount.QueryParams,
+      ComAtprotoServerDeleteAccount.HandlerInput,
+      ComAtprotoServerDeleteAccount.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.deleteAccount' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  deleteSession<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerDeleteSession.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerDeleteSession.HandlerReqCtx<ExtractAuth<AV>>
+  deleteSession<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerDeleteSession.QueryParams,
+      ComAtprotoServerDeleteSession.HandlerInput,
+      ComAtprotoServerDeleteSession.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.deleteSession' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  describeServer<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerDescribeServer.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerDescribeServer.HandlerReqCtx<ExtractAuth<AV>>
+  describeServer<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerDescribeServer.QueryParams,
+      ComAtprotoServerDescribeServer.HandlerInput,
+      ComAtprotoServerDescribeServer.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.describeServer' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getAccountInviteCodes<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerGetAccountInviteCodes.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerGetAccountInviteCodes.HandlerReqCtx<ExtractAuth<AV>>
+  getAccountInviteCodes<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerGetAccountInviteCodes.QueryParams,
+      ComAtprotoServerGetAccountInviteCodes.HandlerInput,
+      ComAtprotoServerGetAccountInviteCodes.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.getAccountInviteCodes' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getServiceAuth<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerGetServiceAuth.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerGetServiceAuth.HandlerReqCtx<ExtractAuth<AV>>
+  getServiceAuth<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerGetServiceAuth.QueryParams,
+      ComAtprotoServerGetServiceAuth.HandlerInput,
+      ComAtprotoServerGetServiceAuth.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.getServiceAuth' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getSession<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerGetSession.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerGetSession.HandlerReqCtx<ExtractAuth<AV>>
+  getSession<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerGetSession.QueryParams,
+      ComAtprotoServerGetSession.HandlerInput,
+      ComAtprotoServerGetSession.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.getSession' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  listAppPasswords<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerListAppPasswords.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerListAppPasswords.HandlerReqCtx<ExtractAuth<AV>>
+  listAppPasswords<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerListAppPasswords.QueryParams,
+      ComAtprotoServerListAppPasswords.HandlerInput,
+      ComAtprotoServerListAppPasswords.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.listAppPasswords' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  refreshSession<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerRefreshSession.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerRefreshSession.HandlerReqCtx<ExtractAuth<AV>>
+  refreshSession<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerRefreshSession.QueryParams,
+      ComAtprotoServerRefreshSession.HandlerInput,
+      ComAtprotoServerRefreshSession.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.refreshSession' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  requestAccountDelete<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerRequestAccountDelete.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerRequestAccountDelete.HandlerReqCtx<ExtractAuth<AV>>
+  requestAccountDelete<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerRequestAccountDelete.QueryParams,
+      ComAtprotoServerRequestAccountDelete.HandlerInput,
+      ComAtprotoServerRequestAccountDelete.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.requestAccountDelete' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  requestEmailConfirmation<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerRequestEmailConfirmation.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerRequestEmailConfirmation.HandlerReqCtx<ExtractAuth<AV>>
+  requestEmailConfirmation<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerRequestEmailConfirmation.QueryParams,
+      ComAtprotoServerRequestEmailConfirmation.HandlerInput,
+      ComAtprotoServerRequestEmailConfirmation.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.requestEmailConfirmation' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  requestEmailUpdate<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerRequestEmailUpdate.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerRequestEmailUpdate.HandlerReqCtx<ExtractAuth<AV>>
+  requestEmailUpdate<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerRequestEmailUpdate.QueryParams,
+      ComAtprotoServerRequestEmailUpdate.HandlerInput,
+      ComAtprotoServerRequestEmailUpdate.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.requestEmailUpdate' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  requestPasswordReset<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerRequestPasswordReset.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerRequestPasswordReset.HandlerReqCtx<ExtractAuth<AV>>
+  requestPasswordReset<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerRequestPasswordReset.QueryParams,
+      ComAtprotoServerRequestPasswordReset.HandlerInput,
+      ComAtprotoServerRequestPasswordReset.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.requestPasswordReset' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  reserveSigningKey<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerReserveSigningKey.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerReserveSigningKey.HandlerReqCtx<ExtractAuth<AV>>
+  reserveSigningKey<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerReserveSigningKey.QueryParams,
+      ComAtprotoServerReserveSigningKey.HandlerInput,
+      ComAtprotoServerReserveSigningKey.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.reserveSigningKey' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  resetPassword<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerResetPassword.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerResetPassword.HandlerReqCtx<ExtractAuth<AV>>
+  resetPassword<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerResetPassword.QueryParams,
+      ComAtprotoServerResetPassword.HandlerInput,
+      ComAtprotoServerResetPassword.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.resetPassword' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  revokeAppPassword<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerRevokeAppPassword.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerRevokeAppPassword.HandlerReqCtx<ExtractAuth<AV>>
+  revokeAppPassword<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerRevokeAppPassword.QueryParams,
+      ComAtprotoServerRevokeAppPassword.HandlerInput,
+      ComAtprotoServerRevokeAppPassword.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.revokeAppPassword' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  updateEmail<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoServerUpdateEmail.Handler<ExtractAuth<AV>>,
-      ComAtprotoServerUpdateEmail.HandlerReqCtx<ExtractAuth<AV>>
+  updateEmail<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoServerUpdateEmail.QueryParams,
+      ComAtprotoServerUpdateEmail.HandlerInput,
+      ComAtprotoServerUpdateEmail.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.server.updateEmail' // @ts-ignore
@@ -920,143 +1065,191 @@ export class ComAtprotoSyncNS {
     this._server = server
   }
 
-  getBlob<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoSyncGetBlob.Handler<ExtractAuth<AV>>,
-      ComAtprotoSyncGetBlob.HandlerReqCtx<ExtractAuth<AV>>
+  getBlob<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoSyncGetBlob.QueryParams,
+      ComAtprotoSyncGetBlob.HandlerInput,
+      ComAtprotoSyncGetBlob.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.sync.getBlob' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getBlocks<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoSyncGetBlocks.Handler<ExtractAuth<AV>>,
-      ComAtprotoSyncGetBlocks.HandlerReqCtx<ExtractAuth<AV>>
+  getBlocks<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoSyncGetBlocks.QueryParams,
+      ComAtprotoSyncGetBlocks.HandlerInput,
+      ComAtprotoSyncGetBlocks.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.sync.getBlocks' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getCheckout<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoSyncGetCheckout.Handler<ExtractAuth<AV>>,
-      ComAtprotoSyncGetCheckout.HandlerReqCtx<ExtractAuth<AV>>
+  getCheckout<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoSyncGetCheckout.QueryParams,
+      ComAtprotoSyncGetCheckout.HandlerInput,
+      ComAtprotoSyncGetCheckout.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.sync.getCheckout' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getHead<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoSyncGetHead.Handler<ExtractAuth<AV>>,
-      ComAtprotoSyncGetHead.HandlerReqCtx<ExtractAuth<AV>>
+  getHead<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoSyncGetHead.QueryParams,
+      ComAtprotoSyncGetHead.HandlerInput,
+      ComAtprotoSyncGetHead.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.sync.getHead' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getLatestCommit<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoSyncGetLatestCommit.Handler<ExtractAuth<AV>>,
-      ComAtprotoSyncGetLatestCommit.HandlerReqCtx<ExtractAuth<AV>>
+  getHostStatus<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoSyncGetHostStatus.QueryParams,
+      ComAtprotoSyncGetHostStatus.HandlerInput,
+      ComAtprotoSyncGetHostStatus.HandlerOutput
+    >,
+  ) {
+    const nsid = 'com.atproto.sync.getHostStatus' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  getLatestCommit<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoSyncGetLatestCommit.QueryParams,
+      ComAtprotoSyncGetLatestCommit.HandlerInput,
+      ComAtprotoSyncGetLatestCommit.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.sync.getLatestCommit' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getRecord<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoSyncGetRecord.Handler<ExtractAuth<AV>>,
-      ComAtprotoSyncGetRecord.HandlerReqCtx<ExtractAuth<AV>>
+  getRecord<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoSyncGetRecord.QueryParams,
+      ComAtprotoSyncGetRecord.HandlerInput,
+      ComAtprotoSyncGetRecord.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.sync.getRecord' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getRepo<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoSyncGetRepo.Handler<ExtractAuth<AV>>,
-      ComAtprotoSyncGetRepo.HandlerReqCtx<ExtractAuth<AV>>
+  getRepo<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoSyncGetRepo.QueryParams,
+      ComAtprotoSyncGetRepo.HandlerInput,
+      ComAtprotoSyncGetRepo.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.sync.getRepo' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getRepoStatus<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoSyncGetRepoStatus.Handler<ExtractAuth<AV>>,
-      ComAtprotoSyncGetRepoStatus.HandlerReqCtx<ExtractAuth<AV>>
+  getRepoStatus<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoSyncGetRepoStatus.QueryParams,
+      ComAtprotoSyncGetRepoStatus.HandlerInput,
+      ComAtprotoSyncGetRepoStatus.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.sync.getRepoStatus' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  listBlobs<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoSyncListBlobs.Handler<ExtractAuth<AV>>,
-      ComAtprotoSyncListBlobs.HandlerReqCtx<ExtractAuth<AV>>
+  listBlobs<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoSyncListBlobs.QueryParams,
+      ComAtprotoSyncListBlobs.HandlerInput,
+      ComAtprotoSyncListBlobs.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.sync.listBlobs' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  listRepos<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoSyncListRepos.Handler<ExtractAuth<AV>>,
-      ComAtprotoSyncListRepos.HandlerReqCtx<ExtractAuth<AV>>
+  listHosts<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoSyncListHosts.QueryParams,
+      ComAtprotoSyncListHosts.HandlerInput,
+      ComAtprotoSyncListHosts.HandlerOutput
+    >,
+  ) {
+    const nsid = 'com.atproto.sync.listHosts' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  listReposByCollection<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoSyncListReposByCollection.QueryParams,
+      ComAtprotoSyncListReposByCollection.HandlerInput,
+      ComAtprotoSyncListReposByCollection.HandlerOutput
+    >,
+  ) {
+    const nsid = 'com.atproto.sync.listReposByCollection' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  listRepos<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoSyncListRepos.QueryParams,
+      ComAtprotoSyncListRepos.HandlerInput,
+      ComAtprotoSyncListRepos.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.sync.listRepos' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  notifyOfUpdate<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoSyncNotifyOfUpdate.Handler<ExtractAuth<AV>>,
-      ComAtprotoSyncNotifyOfUpdate.HandlerReqCtx<ExtractAuth<AV>>
+  notifyOfUpdate<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoSyncNotifyOfUpdate.QueryParams,
+      ComAtprotoSyncNotifyOfUpdate.HandlerInput,
+      ComAtprotoSyncNotifyOfUpdate.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.sync.notifyOfUpdate' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  requestCrawl<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoSyncRequestCrawl.Handler<ExtractAuth<AV>>,
-      ComAtprotoSyncRequestCrawl.HandlerReqCtx<ExtractAuth<AV>>
+  requestCrawl<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoSyncRequestCrawl.QueryParams,
+      ComAtprotoSyncRequestCrawl.HandlerInput,
+      ComAtprotoSyncRequestCrawl.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.sync.requestCrawl' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  subscribeRepos<AV extends StreamAuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoSyncSubscribeRepos.Handler<ExtractAuth<AV>>,
-      ComAtprotoSyncSubscribeRepos.HandlerReqCtx<ExtractAuth<AV>>
+  subscribeRepos<A extends Auth = void>(
+    cfg: StreamConfigOrHandler<
+      A,
+      ComAtprotoSyncSubscribeRepos.QueryParams,
+      ComAtprotoSyncSubscribeRepos.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.sync.subscribeRepos' // @ts-ignore
@@ -1071,33 +1264,48 @@ export class ComAtprotoTempNS {
     this._server = server
   }
 
-  checkSignupQueue<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoTempCheckSignupQueue.Handler<ExtractAuth<AV>>,
-      ComAtprotoTempCheckSignupQueue.HandlerReqCtx<ExtractAuth<AV>>
+  addReservedHandle<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoTempAddReservedHandle.QueryParams,
+      ComAtprotoTempAddReservedHandle.HandlerInput,
+      ComAtprotoTempAddReservedHandle.HandlerOutput
+    >,
+  ) {
+    const nsid = 'com.atproto.temp.addReservedHandle' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  checkSignupQueue<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoTempCheckSignupQueue.QueryParams,
+      ComAtprotoTempCheckSignupQueue.HandlerInput,
+      ComAtprotoTempCheckSignupQueue.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.temp.checkSignupQueue' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  fetchLabels<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoTempFetchLabels.Handler<ExtractAuth<AV>>,
-      ComAtprotoTempFetchLabels.HandlerReqCtx<ExtractAuth<AV>>
+  fetchLabels<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoTempFetchLabels.QueryParams,
+      ComAtprotoTempFetchLabels.HandlerInput,
+      ComAtprotoTempFetchLabels.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.temp.fetchLabels' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  requestPhoneVerification<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      ComAtprotoTempRequestPhoneVerification.Handler<ExtractAuth<AV>>,
-      ComAtprotoTempRequestPhoneVerification.HandlerReqCtx<ExtractAuth<AV>>
+  requestPhoneVerification<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      ComAtprotoTempRequestPhoneVerification.QueryParams,
+      ComAtprotoTempRequestPhoneVerification.HandlerInput,
+      ComAtprotoTempRequestPhoneVerification.HandlerOutput
     >,
   ) {
     const nsid = 'com.atproto.temp.requestPhoneVerification' // @ts-ignore
@@ -1148,77 +1356,84 @@ export class AppBskyActorNS {
     this._server = server
   }
 
-  getPreferences<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyActorGetPreferences.Handler<ExtractAuth<AV>>,
-      AppBskyActorGetPreferences.HandlerReqCtx<ExtractAuth<AV>>
+  getPreferences<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyActorGetPreferences.QueryParams,
+      AppBskyActorGetPreferences.HandlerInput,
+      AppBskyActorGetPreferences.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.actor.getPreferences' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getProfile<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyActorGetProfile.Handler<ExtractAuth<AV>>,
-      AppBskyActorGetProfile.HandlerReqCtx<ExtractAuth<AV>>
+  getProfile<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyActorGetProfile.QueryParams,
+      AppBskyActorGetProfile.HandlerInput,
+      AppBskyActorGetProfile.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.actor.getProfile' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getProfiles<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyActorGetProfiles.Handler<ExtractAuth<AV>>,
-      AppBskyActorGetProfiles.HandlerReqCtx<ExtractAuth<AV>>
+  getProfiles<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyActorGetProfiles.QueryParams,
+      AppBskyActorGetProfiles.HandlerInput,
+      AppBskyActorGetProfiles.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.actor.getProfiles' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getSuggestions<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyActorGetSuggestions.Handler<ExtractAuth<AV>>,
-      AppBskyActorGetSuggestions.HandlerReqCtx<ExtractAuth<AV>>
+  getSuggestions<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyActorGetSuggestions.QueryParams,
+      AppBskyActorGetSuggestions.HandlerInput,
+      AppBskyActorGetSuggestions.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.actor.getSuggestions' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  putPreferences<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyActorPutPreferences.Handler<ExtractAuth<AV>>,
-      AppBskyActorPutPreferences.HandlerReqCtx<ExtractAuth<AV>>
+  putPreferences<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyActorPutPreferences.QueryParams,
+      AppBskyActorPutPreferences.HandlerInput,
+      AppBskyActorPutPreferences.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.actor.putPreferences' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  searchActors<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyActorSearchActors.Handler<ExtractAuth<AV>>,
-      AppBskyActorSearchActors.HandlerReqCtx<ExtractAuth<AV>>
+  searchActors<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyActorSearchActors.QueryParams,
+      AppBskyActorSearchActors.HandlerInput,
+      AppBskyActorSearchActors.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.actor.searchActors' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  searchActorsTypeahead<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyActorSearchActorsTypeahead.Handler<ExtractAuth<AV>>,
-      AppBskyActorSearchActorsTypeahead.HandlerReqCtx<ExtractAuth<AV>>
+  searchActorsTypeahead<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyActorSearchActorsTypeahead.QueryParams,
+      AppBskyActorSearchActorsTypeahead.HandlerInput,
+      AppBskyActorSearchActorsTypeahead.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.actor.searchActorsTypeahead' // @ts-ignore
@@ -1241,198 +1456,216 @@ export class AppBskyFeedNS {
     this._server = server
   }
 
-  describeFeedGenerator<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyFeedDescribeFeedGenerator.Handler<ExtractAuth<AV>>,
-      AppBskyFeedDescribeFeedGenerator.HandlerReqCtx<ExtractAuth<AV>>
+  describeFeedGenerator<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyFeedDescribeFeedGenerator.QueryParams,
+      AppBskyFeedDescribeFeedGenerator.HandlerInput,
+      AppBskyFeedDescribeFeedGenerator.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.feed.describeFeedGenerator' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getActorFeeds<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyFeedGetActorFeeds.Handler<ExtractAuth<AV>>,
-      AppBskyFeedGetActorFeeds.HandlerReqCtx<ExtractAuth<AV>>
+  getActorFeeds<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyFeedGetActorFeeds.QueryParams,
+      AppBskyFeedGetActorFeeds.HandlerInput,
+      AppBskyFeedGetActorFeeds.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.feed.getActorFeeds' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getActorLikes<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyFeedGetActorLikes.Handler<ExtractAuth<AV>>,
-      AppBskyFeedGetActorLikes.HandlerReqCtx<ExtractAuth<AV>>
+  getActorLikes<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyFeedGetActorLikes.QueryParams,
+      AppBskyFeedGetActorLikes.HandlerInput,
+      AppBskyFeedGetActorLikes.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.feed.getActorLikes' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getAuthorFeed<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyFeedGetAuthorFeed.Handler<ExtractAuth<AV>>,
-      AppBskyFeedGetAuthorFeed.HandlerReqCtx<ExtractAuth<AV>>
+  getAuthorFeed<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyFeedGetAuthorFeed.QueryParams,
+      AppBskyFeedGetAuthorFeed.HandlerInput,
+      AppBskyFeedGetAuthorFeed.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.feed.getAuthorFeed' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getFeedGenerator<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyFeedGetFeedGenerator.Handler<ExtractAuth<AV>>,
-      AppBskyFeedGetFeedGenerator.HandlerReqCtx<ExtractAuth<AV>>
+  getFeedGenerator<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyFeedGetFeedGenerator.QueryParams,
+      AppBskyFeedGetFeedGenerator.HandlerInput,
+      AppBskyFeedGetFeedGenerator.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.feed.getFeedGenerator' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getFeedGenerators<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyFeedGetFeedGenerators.Handler<ExtractAuth<AV>>,
-      AppBskyFeedGetFeedGenerators.HandlerReqCtx<ExtractAuth<AV>>
+  getFeedGenerators<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyFeedGetFeedGenerators.QueryParams,
+      AppBskyFeedGetFeedGenerators.HandlerInput,
+      AppBskyFeedGetFeedGenerators.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.feed.getFeedGenerators' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getFeed<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyFeedGetFeed.Handler<ExtractAuth<AV>>,
-      AppBskyFeedGetFeed.HandlerReqCtx<ExtractAuth<AV>>
+  getFeed<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyFeedGetFeed.QueryParams,
+      AppBskyFeedGetFeed.HandlerInput,
+      AppBskyFeedGetFeed.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.feed.getFeed' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getFeedSkeleton<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyFeedGetFeedSkeleton.Handler<ExtractAuth<AV>>,
-      AppBskyFeedGetFeedSkeleton.HandlerReqCtx<ExtractAuth<AV>>
+  getFeedSkeleton<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyFeedGetFeedSkeleton.QueryParams,
+      AppBskyFeedGetFeedSkeleton.HandlerInput,
+      AppBskyFeedGetFeedSkeleton.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.feed.getFeedSkeleton' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getLikes<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyFeedGetLikes.Handler<ExtractAuth<AV>>,
-      AppBskyFeedGetLikes.HandlerReqCtx<ExtractAuth<AV>>
+  getLikes<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyFeedGetLikes.QueryParams,
+      AppBskyFeedGetLikes.HandlerInput,
+      AppBskyFeedGetLikes.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.feed.getLikes' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getListFeed<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyFeedGetListFeed.Handler<ExtractAuth<AV>>,
-      AppBskyFeedGetListFeed.HandlerReqCtx<ExtractAuth<AV>>
+  getListFeed<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyFeedGetListFeed.QueryParams,
+      AppBskyFeedGetListFeed.HandlerInput,
+      AppBskyFeedGetListFeed.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.feed.getListFeed' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getPosts<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyFeedGetPosts.Handler<ExtractAuth<AV>>,
-      AppBskyFeedGetPosts.HandlerReqCtx<ExtractAuth<AV>>
+  getPosts<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyFeedGetPosts.QueryParams,
+      AppBskyFeedGetPosts.HandlerInput,
+      AppBskyFeedGetPosts.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.feed.getPosts' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getPostThread<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyFeedGetPostThread.Handler<ExtractAuth<AV>>,
-      AppBskyFeedGetPostThread.HandlerReqCtx<ExtractAuth<AV>>
+  getPostThread<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyFeedGetPostThread.QueryParams,
+      AppBskyFeedGetPostThread.HandlerInput,
+      AppBskyFeedGetPostThread.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.feed.getPostThread' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getQuotes<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyFeedGetQuotes.Handler<ExtractAuth<AV>>,
-      AppBskyFeedGetQuotes.HandlerReqCtx<ExtractAuth<AV>>
+  getQuotes<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyFeedGetQuotes.QueryParams,
+      AppBskyFeedGetQuotes.HandlerInput,
+      AppBskyFeedGetQuotes.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.feed.getQuotes' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getRepostedBy<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyFeedGetRepostedBy.Handler<ExtractAuth<AV>>,
-      AppBskyFeedGetRepostedBy.HandlerReqCtx<ExtractAuth<AV>>
+  getRepostedBy<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyFeedGetRepostedBy.QueryParams,
+      AppBskyFeedGetRepostedBy.HandlerInput,
+      AppBskyFeedGetRepostedBy.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.feed.getRepostedBy' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getSuggestedFeeds<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyFeedGetSuggestedFeeds.Handler<ExtractAuth<AV>>,
-      AppBskyFeedGetSuggestedFeeds.HandlerReqCtx<ExtractAuth<AV>>
+  getSuggestedFeeds<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyFeedGetSuggestedFeeds.QueryParams,
+      AppBskyFeedGetSuggestedFeeds.HandlerInput,
+      AppBskyFeedGetSuggestedFeeds.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.feed.getSuggestedFeeds' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getTimeline<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyFeedGetTimeline.Handler<ExtractAuth<AV>>,
-      AppBskyFeedGetTimeline.HandlerReqCtx<ExtractAuth<AV>>
+  getTimeline<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyFeedGetTimeline.QueryParams,
+      AppBskyFeedGetTimeline.HandlerInput,
+      AppBskyFeedGetTimeline.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.feed.getTimeline' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  searchPosts<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyFeedSearchPosts.Handler<ExtractAuth<AV>>,
-      AppBskyFeedSearchPosts.HandlerReqCtx<ExtractAuth<AV>>
+  searchPosts<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyFeedSearchPosts.QueryParams,
+      AppBskyFeedSearchPosts.HandlerInput,
+      AppBskyFeedSearchPosts.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.feed.searchPosts' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  sendInteractions<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyFeedSendInteractions.Handler<ExtractAuth<AV>>,
-      AppBskyFeedSendInteractions.HandlerReqCtx<ExtractAuth<AV>>
+  sendInteractions<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyFeedSendInteractions.QueryParams,
+      AppBskyFeedSendInteractions.HandlerInput,
+      AppBskyFeedSendInteractions.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.feed.sendInteractions' // @ts-ignore
@@ -1447,220 +1680,252 @@ export class AppBskyGraphNS {
     this._server = server
   }
 
-  getActorStarterPacks<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphGetActorStarterPacks.Handler<ExtractAuth<AV>>,
-      AppBskyGraphGetActorStarterPacks.HandlerReqCtx<ExtractAuth<AV>>
+  getActorStarterPacks<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphGetActorStarterPacks.QueryParams,
+      AppBskyGraphGetActorStarterPacks.HandlerInput,
+      AppBskyGraphGetActorStarterPacks.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.getActorStarterPacks' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getBlocks<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphGetBlocks.Handler<ExtractAuth<AV>>,
-      AppBskyGraphGetBlocks.HandlerReqCtx<ExtractAuth<AV>>
+  getBlocks<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphGetBlocks.QueryParams,
+      AppBskyGraphGetBlocks.HandlerInput,
+      AppBskyGraphGetBlocks.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.getBlocks' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getFollowers<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphGetFollowers.Handler<ExtractAuth<AV>>,
-      AppBskyGraphGetFollowers.HandlerReqCtx<ExtractAuth<AV>>
+  getFollowers<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphGetFollowers.QueryParams,
+      AppBskyGraphGetFollowers.HandlerInput,
+      AppBskyGraphGetFollowers.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.getFollowers' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getFollows<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphGetFollows.Handler<ExtractAuth<AV>>,
-      AppBskyGraphGetFollows.HandlerReqCtx<ExtractAuth<AV>>
+  getFollows<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphGetFollows.QueryParams,
+      AppBskyGraphGetFollows.HandlerInput,
+      AppBskyGraphGetFollows.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.getFollows' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getKnownFollowers<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphGetKnownFollowers.Handler<ExtractAuth<AV>>,
-      AppBskyGraphGetKnownFollowers.HandlerReqCtx<ExtractAuth<AV>>
+  getKnownFollowers<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphGetKnownFollowers.QueryParams,
+      AppBskyGraphGetKnownFollowers.HandlerInput,
+      AppBskyGraphGetKnownFollowers.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.getKnownFollowers' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getListBlocks<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphGetListBlocks.Handler<ExtractAuth<AV>>,
-      AppBskyGraphGetListBlocks.HandlerReqCtx<ExtractAuth<AV>>
+  getListBlocks<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphGetListBlocks.QueryParams,
+      AppBskyGraphGetListBlocks.HandlerInput,
+      AppBskyGraphGetListBlocks.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.getListBlocks' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getList<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphGetList.Handler<ExtractAuth<AV>>,
-      AppBskyGraphGetList.HandlerReqCtx<ExtractAuth<AV>>
+  getList<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphGetList.QueryParams,
+      AppBskyGraphGetList.HandlerInput,
+      AppBskyGraphGetList.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.getList' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getListMutes<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphGetListMutes.Handler<ExtractAuth<AV>>,
-      AppBskyGraphGetListMutes.HandlerReqCtx<ExtractAuth<AV>>
+  getListMutes<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphGetListMutes.QueryParams,
+      AppBskyGraphGetListMutes.HandlerInput,
+      AppBskyGraphGetListMutes.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.getListMutes' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getLists<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphGetLists.Handler<ExtractAuth<AV>>,
-      AppBskyGraphGetLists.HandlerReqCtx<ExtractAuth<AV>>
+  getLists<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphGetLists.QueryParams,
+      AppBskyGraphGetLists.HandlerInput,
+      AppBskyGraphGetLists.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.getLists' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getMutes<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphGetMutes.Handler<ExtractAuth<AV>>,
-      AppBskyGraphGetMutes.HandlerReqCtx<ExtractAuth<AV>>
+  getMutes<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphGetMutes.QueryParams,
+      AppBskyGraphGetMutes.HandlerInput,
+      AppBskyGraphGetMutes.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.getMutes' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getRelationships<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphGetRelationships.Handler<ExtractAuth<AV>>,
-      AppBskyGraphGetRelationships.HandlerReqCtx<ExtractAuth<AV>>
+  getRelationships<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphGetRelationships.QueryParams,
+      AppBskyGraphGetRelationships.HandlerInput,
+      AppBskyGraphGetRelationships.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.getRelationships' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getStarterPack<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphGetStarterPack.Handler<ExtractAuth<AV>>,
-      AppBskyGraphGetStarterPack.HandlerReqCtx<ExtractAuth<AV>>
+  getStarterPack<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphGetStarterPack.QueryParams,
+      AppBskyGraphGetStarterPack.HandlerInput,
+      AppBskyGraphGetStarterPack.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.getStarterPack' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getStarterPacks<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphGetStarterPacks.Handler<ExtractAuth<AV>>,
-      AppBskyGraphGetStarterPacks.HandlerReqCtx<ExtractAuth<AV>>
+  getStarterPacks<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphGetStarterPacks.QueryParams,
+      AppBskyGraphGetStarterPacks.HandlerInput,
+      AppBskyGraphGetStarterPacks.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.getStarterPacks' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getSuggestedFollowsByActor<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphGetSuggestedFollowsByActor.Handler<ExtractAuth<AV>>,
-      AppBskyGraphGetSuggestedFollowsByActor.HandlerReqCtx<ExtractAuth<AV>>
+  getSuggestedFollowsByActor<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphGetSuggestedFollowsByActor.QueryParams,
+      AppBskyGraphGetSuggestedFollowsByActor.HandlerInput,
+      AppBskyGraphGetSuggestedFollowsByActor.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.getSuggestedFollowsByActor' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  muteActor<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphMuteActor.Handler<ExtractAuth<AV>>,
-      AppBskyGraphMuteActor.HandlerReqCtx<ExtractAuth<AV>>
+  muteActor<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphMuteActor.QueryParams,
+      AppBskyGraphMuteActor.HandlerInput,
+      AppBskyGraphMuteActor.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.muteActor' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  muteActorList<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphMuteActorList.Handler<ExtractAuth<AV>>,
-      AppBskyGraphMuteActorList.HandlerReqCtx<ExtractAuth<AV>>
+  muteActorList<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphMuteActorList.QueryParams,
+      AppBskyGraphMuteActorList.HandlerInput,
+      AppBskyGraphMuteActorList.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.muteActorList' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  muteThread<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphMuteThread.Handler<ExtractAuth<AV>>,
-      AppBskyGraphMuteThread.HandlerReqCtx<ExtractAuth<AV>>
+  muteThread<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphMuteThread.QueryParams,
+      AppBskyGraphMuteThread.HandlerInput,
+      AppBskyGraphMuteThread.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.muteThread' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  unmuteActor<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphUnmuteActor.Handler<ExtractAuth<AV>>,
-      AppBskyGraphUnmuteActor.HandlerReqCtx<ExtractAuth<AV>>
+  searchStarterPacks<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphSearchStarterPacks.QueryParams,
+      AppBskyGraphSearchStarterPacks.HandlerInput,
+      AppBskyGraphSearchStarterPacks.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.graph.searchStarterPacks' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  unmuteActor<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphUnmuteActor.QueryParams,
+      AppBskyGraphUnmuteActor.HandlerInput,
+      AppBskyGraphUnmuteActor.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.unmuteActor' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  unmuteActorList<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphUnmuteActorList.Handler<ExtractAuth<AV>>,
-      AppBskyGraphUnmuteActorList.HandlerReqCtx<ExtractAuth<AV>>
+  unmuteActorList<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphUnmuteActorList.QueryParams,
+      AppBskyGraphUnmuteActorList.HandlerInput,
+      AppBskyGraphUnmuteActorList.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.unmuteActorList' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  unmuteThread<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyGraphUnmuteThread.Handler<ExtractAuth<AV>>,
-      AppBskyGraphUnmuteThread.HandlerReqCtx<ExtractAuth<AV>>
+  unmuteThread<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyGraphUnmuteThread.QueryParams,
+      AppBskyGraphUnmuteThread.HandlerInput,
+      AppBskyGraphUnmuteThread.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.graph.unmuteThread' // @ts-ignore
@@ -1675,11 +1940,12 @@ export class AppBskyLabelerNS {
     this._server = server
   }
 
-  getServices<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyLabelerGetServices.Handler<ExtractAuth<AV>>,
-      AppBskyLabelerGetServices.HandlerReqCtx<ExtractAuth<AV>>
+  getServices<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyLabelerGetServices.QueryParams,
+      AppBskyLabelerGetServices.HandlerInput,
+      AppBskyLabelerGetServices.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.labeler.getServices' // @ts-ignore
@@ -1694,55 +1960,120 @@ export class AppBskyNotificationNS {
     this._server = server
   }
 
-  getUnreadCount<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyNotificationGetUnreadCount.Handler<ExtractAuth<AV>>,
-      AppBskyNotificationGetUnreadCount.HandlerReqCtx<ExtractAuth<AV>>
+  getPreferences<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyNotificationGetPreferences.QueryParams,
+      AppBskyNotificationGetPreferences.HandlerInput,
+      AppBskyNotificationGetPreferences.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.notification.getPreferences' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  getUnreadCount<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyNotificationGetUnreadCount.QueryParams,
+      AppBskyNotificationGetUnreadCount.HandlerInput,
+      AppBskyNotificationGetUnreadCount.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.notification.getUnreadCount' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  listNotifications<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyNotificationListNotifications.Handler<ExtractAuth<AV>>,
-      AppBskyNotificationListNotifications.HandlerReqCtx<ExtractAuth<AV>>
+  listActivitySubscriptions<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyNotificationListActivitySubscriptions.QueryParams,
+      AppBskyNotificationListActivitySubscriptions.HandlerInput,
+      AppBskyNotificationListActivitySubscriptions.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.notification.listActivitySubscriptions' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  listNotifications<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyNotificationListNotifications.QueryParams,
+      AppBskyNotificationListNotifications.HandlerInput,
+      AppBskyNotificationListNotifications.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.notification.listNotifications' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  putPreferences<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyNotificationPutPreferences.Handler<ExtractAuth<AV>>,
-      AppBskyNotificationPutPreferences.HandlerReqCtx<ExtractAuth<AV>>
+  putActivitySubscription<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyNotificationPutActivitySubscription.QueryParams,
+      AppBskyNotificationPutActivitySubscription.HandlerInput,
+      AppBskyNotificationPutActivitySubscription.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.notification.putActivitySubscription' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  putPreferences<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyNotificationPutPreferences.QueryParams,
+      AppBskyNotificationPutPreferences.HandlerInput,
+      AppBskyNotificationPutPreferences.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.notification.putPreferences' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  registerPush<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyNotificationRegisterPush.Handler<ExtractAuth<AV>>,
-      AppBskyNotificationRegisterPush.HandlerReqCtx<ExtractAuth<AV>>
+  putPreferencesV2<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyNotificationPutPreferencesV2.QueryParams,
+      AppBskyNotificationPutPreferencesV2.HandlerInput,
+      AppBskyNotificationPutPreferencesV2.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.notification.putPreferencesV2' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  registerPush<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyNotificationRegisterPush.QueryParams,
+      AppBskyNotificationRegisterPush.HandlerInput,
+      AppBskyNotificationRegisterPush.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.notification.registerPush' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  updateSeen<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyNotificationUpdateSeen.Handler<ExtractAuth<AV>>,
-      AppBskyNotificationUpdateSeen.HandlerReqCtx<ExtractAuth<AV>>
+  unregisterPush<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyNotificationUnregisterPush.QueryParams,
+      AppBskyNotificationUnregisterPush.HandlerInput,
+      AppBskyNotificationUnregisterPush.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.notification.unregisterPush' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  updateSeen<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyNotificationUpdateSeen.QueryParams,
+      AppBskyNotificationUpdateSeen.HandlerInput,
+      AppBskyNotificationUpdateSeen.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.notification.updateSeen' // @ts-ignore
@@ -1765,69 +2096,243 @@ export class AppBskyUnspeccedNS {
     this._server = server
   }
 
-  getConfig<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyUnspeccedGetConfig.Handler<ExtractAuth<AV>>,
-      AppBskyUnspeccedGetConfig.HandlerReqCtx<ExtractAuth<AV>>
+  getAgeAssuranceState<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedGetAgeAssuranceState.QueryParams,
+      AppBskyUnspeccedGetAgeAssuranceState.HandlerInput,
+      AppBskyUnspeccedGetAgeAssuranceState.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.unspecced.getAgeAssuranceState' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  getConfig<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedGetConfig.QueryParams,
+      AppBskyUnspeccedGetConfig.HandlerInput,
+      AppBskyUnspeccedGetConfig.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.unspecced.getConfig' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getPopularFeedGenerators<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyUnspeccedGetPopularFeedGenerators.Handler<ExtractAuth<AV>>,
-      AppBskyUnspeccedGetPopularFeedGenerators.HandlerReqCtx<ExtractAuth<AV>>
+  getPopularFeedGenerators<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedGetPopularFeedGenerators.QueryParams,
+      AppBskyUnspeccedGetPopularFeedGenerators.HandlerInput,
+      AppBskyUnspeccedGetPopularFeedGenerators.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.unspecced.getPopularFeedGenerators' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getSuggestionsSkeleton<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyUnspeccedGetSuggestionsSkeleton.Handler<ExtractAuth<AV>>,
-      AppBskyUnspeccedGetSuggestionsSkeleton.HandlerReqCtx<ExtractAuth<AV>>
+  getPostThreadOtherV2<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedGetPostThreadOtherV2.QueryParams,
+      AppBskyUnspeccedGetPostThreadOtherV2.HandlerInput,
+      AppBskyUnspeccedGetPostThreadOtherV2.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.unspecced.getPostThreadOtherV2' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  getPostThreadV2<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedGetPostThreadV2.QueryParams,
+      AppBskyUnspeccedGetPostThreadV2.HandlerInput,
+      AppBskyUnspeccedGetPostThreadV2.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.unspecced.getPostThreadV2' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  getSuggestedFeeds<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedGetSuggestedFeeds.QueryParams,
+      AppBskyUnspeccedGetSuggestedFeeds.HandlerInput,
+      AppBskyUnspeccedGetSuggestedFeeds.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.unspecced.getSuggestedFeeds' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  getSuggestedFeedsSkeleton<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedGetSuggestedFeedsSkeleton.QueryParams,
+      AppBskyUnspeccedGetSuggestedFeedsSkeleton.HandlerInput,
+      AppBskyUnspeccedGetSuggestedFeedsSkeleton.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.unspecced.getSuggestedFeedsSkeleton' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  getSuggestedStarterPacks<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedGetSuggestedStarterPacks.QueryParams,
+      AppBskyUnspeccedGetSuggestedStarterPacks.HandlerInput,
+      AppBskyUnspeccedGetSuggestedStarterPacks.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.unspecced.getSuggestedStarterPacks' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  getSuggestedStarterPacksSkeleton<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedGetSuggestedStarterPacksSkeleton.QueryParams,
+      AppBskyUnspeccedGetSuggestedStarterPacksSkeleton.HandlerInput,
+      AppBskyUnspeccedGetSuggestedStarterPacksSkeleton.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.unspecced.getSuggestedStarterPacksSkeleton' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  getSuggestedUsers<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedGetSuggestedUsers.QueryParams,
+      AppBskyUnspeccedGetSuggestedUsers.HandlerInput,
+      AppBskyUnspeccedGetSuggestedUsers.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.unspecced.getSuggestedUsers' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  getSuggestedUsersSkeleton<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedGetSuggestedUsersSkeleton.QueryParams,
+      AppBskyUnspeccedGetSuggestedUsersSkeleton.HandlerInput,
+      AppBskyUnspeccedGetSuggestedUsersSkeleton.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.unspecced.getSuggestedUsersSkeleton' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  getSuggestionsSkeleton<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedGetSuggestionsSkeleton.QueryParams,
+      AppBskyUnspeccedGetSuggestionsSkeleton.HandlerInput,
+      AppBskyUnspeccedGetSuggestionsSkeleton.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.unspecced.getSuggestionsSkeleton' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getTaggedSuggestions<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyUnspeccedGetTaggedSuggestions.Handler<ExtractAuth<AV>>,
-      AppBskyUnspeccedGetTaggedSuggestions.HandlerReqCtx<ExtractAuth<AV>>
+  getTaggedSuggestions<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedGetTaggedSuggestions.QueryParams,
+      AppBskyUnspeccedGetTaggedSuggestions.HandlerInput,
+      AppBskyUnspeccedGetTaggedSuggestions.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.unspecced.getTaggedSuggestions' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  searchActorsSkeleton<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyUnspeccedSearchActorsSkeleton.Handler<ExtractAuth<AV>>,
-      AppBskyUnspeccedSearchActorsSkeleton.HandlerReqCtx<ExtractAuth<AV>>
+  getTrendingTopics<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedGetTrendingTopics.QueryParams,
+      AppBskyUnspeccedGetTrendingTopics.HandlerInput,
+      AppBskyUnspeccedGetTrendingTopics.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.unspecced.getTrendingTopics' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  getTrends<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedGetTrends.QueryParams,
+      AppBskyUnspeccedGetTrends.HandlerInput,
+      AppBskyUnspeccedGetTrends.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.unspecced.getTrends' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  getTrendsSkeleton<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedGetTrendsSkeleton.QueryParams,
+      AppBskyUnspeccedGetTrendsSkeleton.HandlerInput,
+      AppBskyUnspeccedGetTrendsSkeleton.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.unspecced.getTrendsSkeleton' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  initAgeAssurance<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedInitAgeAssurance.QueryParams,
+      AppBskyUnspeccedInitAgeAssurance.HandlerInput,
+      AppBskyUnspeccedInitAgeAssurance.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.unspecced.initAgeAssurance' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  searchActorsSkeleton<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedSearchActorsSkeleton.QueryParams,
+      AppBskyUnspeccedSearchActorsSkeleton.HandlerInput,
+      AppBskyUnspeccedSearchActorsSkeleton.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.unspecced.searchActorsSkeleton' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  searchPostsSkeleton<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyUnspeccedSearchPostsSkeleton.Handler<ExtractAuth<AV>>,
-      AppBskyUnspeccedSearchPostsSkeleton.HandlerReqCtx<ExtractAuth<AV>>
+  searchPostsSkeleton<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedSearchPostsSkeleton.QueryParams,
+      AppBskyUnspeccedSearchPostsSkeleton.HandlerInput,
+      AppBskyUnspeccedSearchPostsSkeleton.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.unspecced.searchPostsSkeleton' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  searchStarterPacksSkeleton<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyUnspeccedSearchStarterPacksSkeleton.QueryParams,
+      AppBskyUnspeccedSearchStarterPacksSkeleton.HandlerInput,
+      AppBskyUnspeccedSearchStarterPacksSkeleton.HandlerOutput
+    >,
+  ) {
+    const nsid = 'app.bsky.unspecced.searchStarterPacksSkeleton' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 }
@@ -1839,62 +2344,39 @@ export class AppBskyVideoNS {
     this._server = server
   }
 
-  getJobStatus<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyVideoGetJobStatus.Handler<ExtractAuth<AV>>,
-      AppBskyVideoGetJobStatus.HandlerReqCtx<ExtractAuth<AV>>
+  getJobStatus<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyVideoGetJobStatus.QueryParams,
+      AppBskyVideoGetJobStatus.HandlerInput,
+      AppBskyVideoGetJobStatus.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.video.getJobStatus' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getUploadLimits<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyVideoGetUploadLimits.Handler<ExtractAuth<AV>>,
-      AppBskyVideoGetUploadLimits.HandlerReqCtx<ExtractAuth<AV>>
+  getUploadLimits<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyVideoGetUploadLimits.QueryParams,
+      AppBskyVideoGetUploadLimits.HandlerInput,
+      AppBskyVideoGetUploadLimits.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.video.getUploadLimits' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  uploadVideo<AV extends AuthVerifier>(
-    cfg: ConfigOf<
-      AV,
-      AppBskyVideoUploadVideo.Handler<ExtractAuth<AV>>,
-      AppBskyVideoUploadVideo.HandlerReqCtx<ExtractAuth<AV>>
+  uploadVideo<A extends Auth = void>(
+    cfg: MethodConfigOrHandler<
+      A,
+      AppBskyVideoUploadVideo.QueryParams,
+      AppBskyVideoUploadVideo.HandlerInput,
+      AppBskyVideoUploadVideo.HandlerOutput
     >,
   ) {
     const nsid = 'app.bsky.video.uploadVideo' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 }
-
-type SharedRateLimitOpts<T> = {
-  name: string
-  calcKey?: (ctx: T) => string
-  calcPoints?: (ctx: T) => number
-}
-type RouteRateLimitOpts<T> = {
-  durationMs: number
-  points: number
-  calcKey?: (ctx: T) => string
-  calcPoints?: (ctx: T) => number
-}
-type HandlerOpts = { blobLimit?: number }
-type HandlerRateLimitOpts<T> = SharedRateLimitOpts<T> | RouteRateLimitOpts<T>
-type ConfigOf<Auth, Handler, ReqCtx> =
-  | Handler
-  | {
-      auth?: Auth
-      opts?: HandlerOpts
-      rateLimit?: HandlerRateLimitOpts<ReqCtx> | HandlerRateLimitOpts<ReqCtx>[]
-      handler: Handler
-    }
-type ExtractAuth<AV extends AuthVerifier | StreamAuthVerifier> = Extract<
-  Awaited<ReturnType<AV>>,
-  { credentials: unknown }
->
